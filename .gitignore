@@ -1,0 +1,6 @@
+*.exe
+*.dll
+*.out
+*.o
+*.so
+*rutas_cortas.csv
