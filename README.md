@@ -1,4 +1,4 @@
-# 🗺️ Visualizador de la Ruta Más Corta
+## 🗺️ Visualizador de la Ruta Más Corta
 
 Este programa permite visualizar rutas óptimas en distintos mapas utilizando el algoritmo de Dijkstra. Los datos geográficos de los mapas están en formato `.csv`.
 
