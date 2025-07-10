@@ -1,5 +1,9 @@
-#include "STL/map.hpp"
-template <typename K, typename V> 
+#pragma once
+#include <cstddef>
+
+namespace unsa {
+
+template <typename K, typename V>
 Map<K, V>::Map() {
   capacity = 4;
   size = 0;
@@ -7,17 +11,17 @@ Map<K, V>::Map() {
   values = new V[capacity];
 }
 
-template <typename K, typename V> 
+template <typename K, typename V>
 Map<K, V>::~Map() {
   delete[] keys;
   delete[] values;
 }
 
-template <typename K, typename V> 
+template <typename K, typename V>
 void Map<K, V>::resize() {
   capacity *= 2;
-  K *newKeys = new K[capacity];
-  V *newValues = new V[capacity];
+  K* newKeys = new K[capacity];
+  V* newValues = new V[capacity];
 
   for (int i = 0; i < size; ++i) {
     newKeys[i] = keys[i];
@@ -32,7 +36,7 @@ void Map<K, V>::resize() {
 }
 
 template <typename K, typename V>
-void Map<K, V>::insert(const K &key, const V &value) {
+void Map<K, V>::insert(const K& key, const V& value) {
   for (int i = 0; i < size; ++i) {
     if (keys[i] == key) {
       values[i] = value;
@@ -42,27 +46,29 @@ void Map<K, V>::insert(const K &key, const V &value) {
 
   if (size == capacity)
     resize();
+
   keys[size] = key;
   values[size] = value;
   ++size;
 }
 
-template <typename K, typename V> 
-V &Map<K, V>::operator[](const K &key) {
+template <typename K, typename V>
+V& Map<K, V>::operator[](const K& key) {
   for (int i = 0; i < size; ++i)
     if (keys[i] == key)
       return values[i];
 
   if (size == capacity)
     resize();
+
   keys[size] = key;
   values[size] = V{};
   ++size;
   return values[size - 1];
 }
 
-template <typename K, typename V> 
-bool Map<K, V>::get(const K &key, V &value) const {
+template <typename K, typename V>
+bool Map<K, V>::get(const K& key, V& value) const {
   for (int i = 0; i < size; ++i) {
     if (keys[i] == key) {
       value = values[i];
@@ -72,8 +78,8 @@ bool Map<K, V>::get(const K &key, V &value) const {
   return false;
 }
 
-template <typename K, typename V> 
-bool Map<K, V>::erase(const K &key) {
+template <typename K, typename V>
+bool Map<K, V>::erase(const K& key) {
   for (int i = 0; i < size; ++i) {
     if (keys[i] == key) {
       keys[i] = keys[size - 1];
@@ -85,17 +91,19 @@ bool Map<K, V>::erase(const K &key) {
   return false;
 }
 
-template <typename K, typename V> 
+template <typename K, typename V>
 int Map<K, V>::getSize() const {
   return size;
 }
 
-template <typename K, typename V> 
+template <typename K, typename V>
 bool Map<K, V>::isEmpty() const {
   return size == 0;
 }
 
-template <typename K, typename V> 
-void Map<K, V>::clear() { 
-  size = 0; 
+template <typename K, typename V>
+void Map<K, V>::clear() {
+  size = 0;
+}
+
 }

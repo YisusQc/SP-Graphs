@@ -1,16 +1,17 @@
-all: mapa
+CXX = g++
+CXXFLAGS = -Iinclude
+LDFLAGS = -lsfml-graphics -lsfml-window -lsfml-system
+TARGET = mapa
+SRC = mapa.cpp graph.cpp utilities.cpp
+OBJ = $(SRC:.cpp=.o)
 
-mapa: mapa.o graph.o utilities.o
-	g++ mapa.o graph.o utilities.o -o mapa -lsfml-graphics -lsfml-window -lsfml-system
+all: $(TARGET)
 
-mapa.o: graph.hpp utilities.hpp
-	g++ -c mapa.cpp
+$(TARGET): $(OBJ)
+	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
 
-graph.o: graph.hpp
-	g++ -c graph.cpp
-
-utilities.o: utilities.hpp
-	g++ -c utilities.cpp
+%.o: %.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:
 	rm -f mapa *.o
