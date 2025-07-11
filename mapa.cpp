@@ -3,6 +3,7 @@
 #include <vector>
 #include <map>
 #include <iostream>
+#include <optional> // NECESARIO para std::optional
 #include "Graph.hpp"
 #include "utilities.hpp"
 
@@ -31,12 +32,15 @@ int main() {
   cargarCaminos(basePath, caminos);
   rutas = cargarRutas(basePath);
   graph.load(basePath + "nodes.csv", basePath + "edges.csv");
-  
+
   long long inicio = -1, destino = -1;
 
   while (window.isOpen()) {
-    while (std::optional event = window.pollEvent()) {
-      if (event->is<sf::Event::Closed>()) window.close();
+    sf::Event rawEvent;
+    while (window.pollEvent(rawEvent)) {
+      std::optional<sf::Event> event = rawEvent;
+
+      if (event->type == sf::Event::Closed) window.close();
       else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Escape)) window.close();
 
       else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::N)) {
@@ -50,7 +54,7 @@ int main() {
         graph.load(basePath + "nodes.csv", basePath + "edges.csv");
         inicio = destino = -1;
 
-      } else if (event->is<sf::Event::MouseButtonPressed>()) {
+      } else if (event->type == sf::Event::MouseButtonPressed) {
         sf::Vector2i mousePos = sf::Mouse::getPosition(window);
         sf::Vector2f clic = window.mapPixelToCoords(mousePos);
         long long nodo = nodoMasCercano(clic, W, H, 8.f, nodos, minLon, maxLon, minLat, maxLat);
@@ -69,9 +73,9 @@ int main() {
         std::cout << "Calculando ruta de " << inicio << " a " << destino << "\n";
         if (graph.compute_and_save_route(inicio, destino, rutaArchivo)) {
           rutas = cargarRutas(basePath);
-          std::cout << "Ruta agreagada con exito.\n";
+          std::cout << "Ruta agregada con éxito.\n";
         } else
-          std::cout << "No se encontro ruta.\n";
+          std::cout << "No se encontró ruta.\n";
         inicio = destino = -1;
 
       } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::C)) {
