@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -Iinclude
+CXXFLAGS = -Iinclude -I.
 LDFLAGS = -lsfml-graphics -lsfml-window -lsfml-system
 TARGET = mapa
 SRC = mapa.cpp graph.cpp utilities.cpp
