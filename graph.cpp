@@ -1,7 +1,8 @@
+// Graph.cpp
 #include "Graph.hpp"
 #include <fstream>
 #include <sstream>
-#include <queue>
+#include "unsa/unsa.hpp"   // asegúrate de que incluye PriorityQueue y Vector corregidos
 #include <limits>
 #include <algorithm>
 #include <iostream>
@@ -11,7 +12,8 @@ void Graph::load(const std::string& nodes_file, const std::string& edges_file) {
   graph.clear();
 
   std::ifstream file(nodes_file);
-  std::string line; std::getline(file, line);
+  std::string line; 
+  std::getline(file, line);  // saltar header
   while (std::getline(file, line)) {
     std::stringstream ss(line);
     long long id;
@@ -22,7 +24,7 @@ void Graph::load(const std::string& nodes_file, const std::string& edges_file) {
   }
 
   std::ifstream edge_file(edges_file);
-  std::getline(edge_file, line);
+  std::getline(edge_file, line);  // saltar header
   while (std::getline(edge_file, line)) {
     std::stringstream ss(line);
     long long src, tgt;
@@ -37,23 +39,23 @@ std::unordered_map<long long, long long> Graph::dijkstra(long long start, long l
   std::unordered_map<long long, double> dist;
   std::unordered_map<long long, long long> prev;
 
-  for (auto& [id, _] : nodes)
-    dist[id] = std::numeric_limits<double>::infinity();
+  for (auto& [id, _] : nodes) dist[id] = std::numeric_limits<double>::infinity();
   dist[start] = 0.0;
 
-  auto cmp = [&](long long a, long long b) { return dist[a] > dist[b]; };
-  std::priority_queue<long long, std::vector<long long>, decltype(cmp)> pq(cmp);
-  pq.push(start);
+  using PQNode = std::pair<double, long long>;
+  unsa::PriorityQueue<PQNode, std::greater<PQNode>> pq;
+  pq.push({0.0, start});
 
   while (!pq.empty()) {
-    long long u = pq.top(); pq.pop();
+    auto [d_u, u] = pq.top(); pq.pop();
+    if (d_u > dist[u]) continue;
     if (u == goal) break;
     for (auto& edge : graph[u]) {
       double alt = dist[u] + edge.distance;
       if (alt < dist[edge.target]) {
         dist[edge.target] = alt;
         prev[edge.target] = u;
-        pq.push(edge.target);
+        pq.push({alt, edge.target});
       }
     }
   }
