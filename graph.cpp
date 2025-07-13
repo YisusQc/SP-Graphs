@@ -43,7 +43,7 @@ std::unordered_map<long long, long long> Graph::dijkstra(long long start, long l
   dist[start] = 0.0;
 
   using PQNode = std::pair<double, long long>;
-  unsa::PriorityQueue<PQNode, std::greater<PQNode>> pq;
+  unsa::PriorityQueue<PQNode, std::less<PQNode>> pq;
   pq.push({0.0, start});
 
   while (!pq.empty()) {
