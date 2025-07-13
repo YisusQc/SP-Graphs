@@ -3,7 +3,7 @@
 #include <vector>
 #include <map>
 #include <iostream>
-#include <optional> // NECESARIO para std::optional
+#include <optional>
 #include "Graph.hpp"
 #include "utilities.hpp"
 
@@ -36,11 +36,8 @@ int main() {
   long long inicio = -1, destino = -1;
 
   while (window.isOpen()) {
-    sf::Event rawEvent;
-    while (window.pollEvent(rawEvent)) {
-      std::optional<sf::Event> event = rawEvent;
-
-      if (event->type == sf::Event::Closed) window.close();
+    while (std::optional event = window.pollEvent()) {
+      if (event->is<sf::Event::Closed>()) window.close();
       else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Escape)) window.close();
 
       else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::N)) {
@@ -54,7 +51,7 @@ int main() {
         graph.load(basePath + "nodes.csv", basePath + "edges.csv");
         inicio = destino = -1;
 
-      } else if (event->type == sf::Event::MouseButtonPressed) {
+      } else if (event->is<sf::Event::MouseButtonPressed>()) {
         sf::Vector2i mousePos = sf::Mouse::getPosition(window);
         sf::Vector2f clic = window.mapPixelToCoords(mousePos);
         long long nodo = nodoMasCercano(clic, W, H, 8.f, nodos, minLon, maxLon, minLat, maxLat);
