@@ -77,6 +77,60 @@ int main() {
         auto path = graph.reconstruct_path(prevMap, inicio, destino);
 
         if (!path.empty()) {
+          const auto& pasos = algoritmo->getPasosAnimados();
+          sf::VertexArray animadas(sf::PrimitiveType::Lines, 0);
+
+          bool saltarAnimacion = false;
+          // Bucle de animacion
+          for (const auto& paso : pasos) {
+
+            while (std::optional event = window.pollEvent()) {
+              if (event->is<sf::Event::Closed>()) {
+                window.close();
+                return 0;
+              } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::B)) {
+                saltarAnimacion = true;
+                break;
+              }
+            }
+
+            if(saltarAnimacion) break;
+
+            const auto& nodoA = graph.getNodes().at(paso.desde);
+            const auto& nodoB = graph.getNodes().at(paso.hacia);
+
+            sf::Vector2f p1 = normalizar({nodoA.lon, nodoA.lat}, minLon, maxLon, minLat, maxLat, W, H);
+            sf::Vector2f p2 = normalizar({nodoB.lon, nodoB.lat}, minLon, maxLon, minLat, maxLat, W, H);
+
+            animadas.append(sf::Vertex({p1, sf::Color::Magenta}));
+            animadas.append(sf::Vertex({p2, sf::Color::Magenta}));
+
+            window.clear(sf::Color::Black);
+
+            // Redibujar mapa base
+            for (const auto& [_, puntos] : caminos) {
+                sf::VertexArray v(sf::PrimitiveType::LineStrip, puntos.size());
+                for (size_t i = 0; i < puntos.size(); ++i)
+                    v[i].position = normalizar(puntos[i], minLon, maxLon, minLat, maxLat, W, H),
+                    v[i].color = sf::Color(200, 200, 200);
+                window.draw(v);
+            }
+
+            for (const auto& [id, coord] : nodos) {
+                sf::Vector2f pos = normalizar(coord, minLon, maxLon, minLat, maxLat, W, H);
+                sf::CircleShape punto(1.0f);
+                punto.setFillColor(sf::Color::Yellow);
+                punto.setOrigin({2.f, 2.f});
+                punto.setPosition(pos);
+                window.draw(punto);
+            }
+
+            // Dibujar todos los pasos acumulados
+            window.draw(animadas);
+            window.display();
+            sf::sleep(sf::milliseconds(5));
+          }
+
           graph.save_route(path, inicio, destino, rutaArchivo, graph.getNodes());
           rutas = cargarRutas(basePath);
           std::cout << "Ruta agregada con exito.\n";
@@ -112,7 +166,6 @@ int main() {
 
     for (const auto& [id, coord] : nodos) {
       sf::Vector2f pos = normalizar(coord, minLon, maxLon, minLat, maxLat, W, H);
-
       sf::CircleShape punto(1.0f);
       punto.setFillColor(sf::Color::Yellow);
       punto.setOrigin({2.f, 2.f});

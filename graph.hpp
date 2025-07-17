@@ -19,8 +19,6 @@ private:
   std::unordered_map<long long, Node> nodes;
   std::unordered_map<long long, std::vector<Edge>> graph;
 
-  std::unordered_map<long long, long long> dijkstra(long long start, long long goal);
-
 public:
   void load(const std::string& nodes_file, const std::string& edges_file);
   std::vector<long long> reconstruct_path(const std::unordered_map<long long, long long>& prev, long long start, long long goal);

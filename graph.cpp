@@ -34,33 +34,6 @@ void Graph::load(const std::string& nodes_file, const std::string& edges_file) {
   }
 }
 
-std::unordered_map<long long, long long> Graph::dijkstra(long long start, long long goal) {
-  std::unordered_map<long long, double> dist;
-  std::unordered_map<long long, long long> prev;
-
-  for (auto& [id, _] : nodes) dist[id] = std::numeric_limits<double>::infinity();
-  dist[start] = 0.0;
-
-  using PQNode = std::pair<double, long long>;
-  unsa::PriorityQueue<PQNode, std::less<PQNode>> pq;
-  pq.push({0.0, start});
-
-  while (!pq.empty()) {
-    auto [d_u, u] = pq.top(); pq.pop();
-    if (d_u > dist[u]) continue;
-    if (u == goal) break;
-    for (auto& edge : graph[u]) {
-      double alt = dist[u] + edge.distance;
-      if (alt < dist[edge.target]) {
-        dist[edge.target] = alt;
-        prev[edge.target] = u;
-        pq.push({alt, edge.target});
-      }
-    }
-  }
-  return prev;
-}
-
 std::vector<long long> Graph::reconstruct_path(const std::unordered_map<long long, long long>& prev, long long start, long long goal) {
   std::vector<long long> path;
   long long at = goal;

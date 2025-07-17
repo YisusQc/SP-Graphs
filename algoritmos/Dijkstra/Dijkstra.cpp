@@ -5,6 +5,7 @@
 #include <algorithm>
 
 std::unordered_map<long long, long long> Dijkstra::findPath(const Graph& graph, long long start, long long goal) {
+  pasosAnimados.clear();
   const auto& nodes = graph.getNodes();
   const auto& adj = graph.getGraph();
 
@@ -31,6 +32,7 @@ std::unordered_map<long long, long long> Dijkstra::findPath(const Graph& graph, 
       if (alt < dist[edge.target]) {
         dist[edge.target] = alt;
         prev[edge.target] = u;
+        pasosAnimados.push_back({u, edge.target});
         pq.push({alt, edge.target});
       }
     }
