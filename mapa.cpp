@@ -4,8 +4,9 @@
 #include <map>
 #include <iostream>
 #include <optional>
-#include "Graph.hpp"
+#include "graph.hpp"
 #include "utilities.hpp"
+#include "algoritmos/unsa_algoritmos.hpp"
 
 int main() {
   int mapaActual = 1;
@@ -34,6 +35,8 @@ int main() {
   graph.load(basePath + "nodes.csv", basePath + "edges.csv");
 
   long long inicio = -1, destino = -1;
+
+  std::unique_ptr<IPathFinder> algoritmo = std::make_unique<Dijkstra>();
 
   while (window.isOpen()) {
     while (std::optional event = window.pollEvent()) {
@@ -67,12 +70,18 @@ int main() {
         }
       } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::R) && inicio != -1 && destino != -1) {
         std::string rutaArchivo = basePath + "rutas_cortas.csv";
+        std::cout << "Algoritmo: " << algoritmo->name() << "\n";
         std::cout << "Calculando ruta de " << inicio << " a " << destino << "\n";
-        if (graph.compute_and_save_route(inicio, destino, rutaArchivo)) {
+
+        auto prevMap = algoritmo->findPath(graph, inicio, destino);
+        auto path = graph.reconstruct_path(prevMap, inicio, destino);
+
+        if (!path.empty()) {
+          graph.save_route(path, inicio, destino, rutaArchivo, graph.getNodes());
           rutas = cargarRutas(basePath);
-          std::cout << "Ruta agregada con éxito.\n";
+          std::cout << "Ruta agregada con exito.\n";
         } else
-          std::cout << "No se encontró ruta.\n";
+          std::cout << "No se encontro ruta.\n";
         inicio = destino = -1;
 
       } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::C)) {
@@ -104,7 +113,7 @@ int main() {
     for (const auto& [id, coord] : nodos) {
       sf::Vector2f pos = normalizar(coord, minLon, maxLon, minLat, maxLat, W, H);
 
-      sf::CircleShape punto(1.5f);
+      sf::CircleShape punto(1.0f);
       punto.setFillColor(sf::Color::Yellow);
       punto.setOrigin({2.f, 2.f});
       punto.setPosition(pos);

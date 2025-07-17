@@ -1,8 +1,7 @@
-// Graph.cpp
-#include "Graph.hpp"
+#include "graph.hpp"
 #include <fstream>
 #include <sstream>
-#include "unsa/unsa.hpp"   // asegúrate de que incluye PriorityQueue y Vector corregidos
+#include "unsa/unsa.hpp"
 #include <limits>
 #include <algorithm>
 #include <iostream>
@@ -75,18 +74,13 @@ std::vector<long long> Graph::reconstruct_path(const std::unordered_map<long lon
   return path;
 }
 
-bool Graph::compute_and_save_route(long long start, long long goal, const std::string& output_file) {
-  auto prev = dijkstra(start, goal);
-  auto path = reconstruct_path(prev, start, goal);
-  if (path.empty()) return false;
-
+void Graph::save_route(const std::vector<long long>& path, long long start, long long goal, const std::string& output_file, const std::unordered_map<long long, Node>& nodes) {
   std::ofstream file(output_file, std::ios::app);
   file << "INICIO:" << start << ",DESTINO:" << goal << "\n";
   file << "id,lat,lon\n";
   for (long long id : path) {
-    const Node& n = nodes[id];
+    const Node& n = nodes.at(id);
     file << id << "," << n.lat << "," << n.lon << "\n";
   }
   file << "\n";
-  return true;
 }

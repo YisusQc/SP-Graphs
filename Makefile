@@ -1,8 +1,8 @@
 CXX = g++
-CXXFLAGS = -Iinclude -I.
+CXXFLAGS = -I. -I./algoritmos
 LDFLAGS = -lsfml-graphics -lsfml-window -lsfml-system
 TARGET = mapa
-SRC = mapa.cpp graph.cpp utilities.cpp
+SRC = $(wildcard *.cpp) \ $(wildcard algoritmos/**/*.cpp)
 OBJ = $(SRC:.cpp=.o)
 
 all: $(TARGET)
@@ -14,4 +14,4 @@ $(TARGET): $(OBJ)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:
-	rm -f mapa *.o
+	rm -f $(TARGET) *.o algoritmos/*/*.o
