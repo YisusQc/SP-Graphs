@@ -102,8 +102,8 @@ int main() {
             sf::Vector2f p1 = normalizar({nodoA.lon, nodoA.lat}, minLon, maxLon, minLat, maxLat, W, H);
             sf::Vector2f p2 = normalizar({nodoB.lon, nodoB.lat}, minLon, maxLon, minLat, maxLat, W, H);
 
-            animadas.append(sf::Vertex({p1, sf::Color::Magenta}));
-            animadas.append(sf::Vertex({p2, sf::Color::Magenta}));
+            animadas.append(sf::Vertex({p1, sf::Color::Red}));
+            animadas.append(sf::Vertex({p2, sf::Color::Red}));
 
             window.clear(sf::Color::Black);
 
