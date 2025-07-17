@@ -4,15 +4,17 @@ Este programa permite visualizar rutas óptimas en distintos mapas utilizando el
 
 ## 🎮 Controles de Interacción
 
-| Tecla / Acción | Función                                                                          |
-|----------------|----------------------------------------------------------------------------------|
-| `N`            | Cambiar al siguiente mapa disponible (en un bucle de 5 mapas)                    |
-| `Click Izquierdo` | Seleccionar el punto de inicio y el punto de destino en el mapa               |
-| `R`            | Calcular y dibujar la ruta más corta entre los puntos seleccionados (si existe)  |
-| `C`            | Limpiar las rutas dibujadas en el mapa actual                                    |
-| `ESC`          | Salir del programa                                                               |
+| Tecla / Acción    | Función                                                                          |
+|-------------------|----------------------------------------------------------------------------------|
+| `N`               | Cambiar al siguiente mapa disponible (en un bucle de 5 mapas)                    |
+| `Click Izquierdo` | Seleccionar el punto de inicio y el punto de destino en el mapa                  |
+| `R`               | Calcular y dibujar la ruta más corta entre los puntos seleccionados (si existe)  |
+|`B`                | Saltar animación                                                                 |
+| `C`               | Limpiar las rutas dibujadas en el mapa actual                                    |
+| `ESC`             | Salir del programa                                                               |
 
 ## 🔧 Requisitos
 - Tener instalado: SFML 3.0.0
-- Compilador de tu preferencia: gcc, g++, Clang, MSVC, TCC, ICC
+- Compilador para C++: gcc, g++, Clang, MSVC, TCC, ICC
+- Herramienta Make
 - SO: Linux, macOS o Windows
