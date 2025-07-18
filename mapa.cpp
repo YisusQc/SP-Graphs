@@ -39,6 +39,7 @@ int main() {
   graph.load(basePath + "nodes.csv", basePath + "edges.csv");
 
   long long inicio = -1, destino = -1;
+  int colorAnimacion = 0;
 
   std::unique_ptr<IPathFinder> algoritmo = std::make_unique<Dijkstra>();
 
@@ -49,6 +50,7 @@ int main() {
 
       else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::N)) {
         view = window.getDefaultView();
+        colorAnimacion = 0;
         mapaActual = (mapaActual % 5) + 1;
         basePath = "data/mapa" + std::to_string(mapaActual) + "/";
         std::cout << "Cambiando a mapa " << mapaActual << "\n";
@@ -115,8 +117,8 @@ int main() {
             sf::Vector2f p1 = normalizar({nodoA.lon, nodoA.lat}, minLon, maxLon, minLat, maxLat, W, H);
             sf::Vector2f p2 = normalizar({nodoB.lon, nodoB.lat}, minLon, maxLon, minLat, maxLat, W, H);
 
-            animadas.append(sf::Vertex({p1, sf::Color::Red}));
-            animadas.append(sf::Vertex({p2, sf::Color::Red}));
+            animadas.append(sf::Vertex({p1, colores[colorAnimacion % colores.size()]}));
+            animadas.append(sf::Vertex({p2, colores[colorAnimacion % colores.size()]}));
 
             window.clear(sf::Color::Black);
             window.setView(view);
@@ -145,6 +147,7 @@ int main() {
             sf::sleep(sf::milliseconds(5));
           }
 
+          colorAnimacion++;
           graph.save_route(path, inicio, destino, rutaArchivo, graph.getNodes());
           rutas = cargarRutas(basePath);
           std::cout << "Ruta agregada con exito.\n";
