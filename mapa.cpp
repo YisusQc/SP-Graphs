@@ -8,6 +8,9 @@
 #include "utilities.hpp"
 #include "algoritmos/unsa_algoritmos.hpp"
 
+const float ZOOM_FACTOR = 1.02f;
+const float MOVE_SPEED = 2.0f;
+
 int main() {
   int mapaActual = 1;
   std::string basePath = "data/mapa" + std::to_string(mapaActual) + "/";
@@ -17,6 +20,7 @@ int main() {
 
   const int W = 1100, H = 800;
   sf::RenderWindow window(sf::VideoMode({W, H}), "Ruta Mas Corta");
+  sf::View view = window.getDefaultView();
 
   std::vector<sf::Color> colores = {
     sf::Color::Red, sf::Color::Green, sf::Color::Blue,
@@ -44,6 +48,7 @@ int main() {
       else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Escape)) window.close();
 
       else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::N)) {
+        view = window.getDefaultView();
         mapaActual = (mapaActual % 5) + 1;
         basePath = "data/mapa" + std::to_string(mapaActual) + "/";
         std::cout << "Cambiando a mapa " << mapaActual << "\n";
@@ -96,6 +101,14 @@ int main() {
 
             if(saltarAnimacion) break;
 
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::A)) view.move({-MOVE_SPEED, 0});
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::D)) view.move({MOVE_SPEED, 0});
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::W)) view.move({0, -MOVE_SPEED});
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::S)) view.move({0, MOVE_SPEED});
+
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Q)) view.zoom(ZOOM_FACTOR);
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::E)) view.zoom(1.f / ZOOM_FACTOR);
+
             const auto& nodoA = graph.getNodes().at(paso.desde);
             const auto& nodoB = graph.getNodes().at(paso.hacia);
 
@@ -106,6 +119,7 @@ int main() {
             animadas.append(sf::Vertex({p2, sf::Color::Red}));
 
             window.clear(sf::Color::Black);
+            window.setView(view);
 
             // Redibujar mapa base
             for (const auto& [_, puntos] : caminos) {
@@ -125,7 +139,7 @@ int main() {
                 window.draw(punto);
             }
 
-            // Dibujar todos los pasos acumulados
+            // Dibujar todos los pasos acumulados para la animación
             window.draw(animadas);
             window.display();
             sf::sleep(sf::milliseconds(5));
@@ -145,7 +159,16 @@ int main() {
       }
     }
 
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::A)) view.move({-MOVE_SPEED, 0});
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::D)) view.move({MOVE_SPEED, 0});
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::W)) view.move({0, -MOVE_SPEED});
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::S)) view.move({0, MOVE_SPEED});
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Q)) view.zoom(ZOOM_FACTOR);
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::E)) view.zoom(1.f / ZOOM_FACTOR);
+
     window.clear(sf::Color::Black);
+    window.setView(view);
 
     for (const auto& [_, puntos] : caminos) {
       sf::VertexArray v(sf::PrimitiveType::LineStrip, puntos.size());
