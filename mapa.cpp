@@ -112,7 +112,7 @@ int main() {
                 sf::VertexArray v(sf::PrimitiveType::LineStrip, puntos.size());
                 for (size_t i = 0; i < puntos.size(); ++i)
                     v[i].position = normalizar(puntos[i], minLon, maxLon, minLat, maxLat, W, H),
-                    v[i].color = sf::Color(200, 200, 200);
+                    v[i].color = sf::Color(75, 75, 75);
                 window.draw(v);
             }
 
@@ -151,7 +151,7 @@ int main() {
       sf::VertexArray v(sf::PrimitiveType::LineStrip, puntos.size());
       for (size_t i = 0; i < puntos.size(); ++i)
         v[i].position = normalizar(puntos[i], minLon, maxLon, minLat, maxLat, W, H),
-        v[i].color = sf::Color(200, 200, 200);
+        v[i].color = sf::Color(75, 75, 75);
       window.draw(v);
     }
 
