@@ -35,7 +35,6 @@ int main() {
 
   cargarNodos(basePath, nodos, minLon, maxLon, minLat, maxLat);
   cargarCaminos(basePath, caminos);
-  rutas = cargarRutas(basePath);
   graph.load(basePath + "nodes.csv", basePath + "edges.csv");
 
   long long inicio = -1, destino = -1;
