@@ -135,7 +135,12 @@ int main() {
             for (const auto& [id, coord] : nodos) {
                 sf::Vector2f pos = normalizar(coord, minLon, maxLon, minLat, maxLat, W, H);
                 sf::CircleShape punto(1.0f);
-                punto.setFillColor(sf::Color::Yellow);
+                if ((inicio != -1 && id == inicio) || (destino != -1 && id == destino)) {
+                  punto.setRadius(3.0f);
+                  punto.setFillColor(sf::Color::Magenta);
+                } else {
+                  punto.setFillColor(sf::Color::Yellow);
+                }
                 punto.setOrigin({2.f, 2.f});
                 punto.setPosition(pos);
                 window.draw(punto);
@@ -193,7 +198,12 @@ int main() {
     for (const auto& [id, coord] : nodos) {
       sf::Vector2f pos = normalizar(coord, minLon, maxLon, minLat, maxLat, W, H);
       sf::CircleShape punto(1.0f);
-      punto.setFillColor(sf::Color::Yellow);
+      if ((inicio != -1 && id == inicio) || (destino != -1 && id == destino)) {
+        punto.setRadius(3.0f);
+        punto.setFillColor(sf::Color::Magenta);
+      } else {
+        punto.setFillColor(sf::Color::Yellow);
+      }
       punto.setOrigin({2.f, 2.f});
       punto.setPosition(pos);
 
