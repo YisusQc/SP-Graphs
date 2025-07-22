@@ -23,7 +23,7 @@ int main() {
   sf::View view = window.getDefaultView();
 
   std::vector<sf::Color> colores = {
-    sf::Color::Red, sf::Color::Green, sf::Color::Blue,
+    sf::Color::Red, sf::Color::Green, sf::Color::Magenta,
     {255,136,0}, {136,0,255}, {0,136,136}, {170,0,170}
   };
 
@@ -87,7 +87,7 @@ int main() {
           sf::VertexArray animadas(sf::PrimitiveType::Lines, 0);
 
           bool saltarAnimacion = false;
-          // Bucle de animacion
+          // Bucle de animacion de expansión
           for (const auto& paso : pasos) {
 
             while (std::optional event = window.pollEvent()) {
@@ -124,31 +124,85 @@ int main() {
 
             // Redibujar mapa base
             for (const auto& [_, puntos] : caminos) {
-                sf::VertexArray v(sf::PrimitiveType::LineStrip, puntos.size());
-                for (size_t i = 0; i < puntos.size(); ++i)
-                    v[i].position = normalizar(puntos[i], minLon, maxLon, minLat, maxLat, W, H),
-                    v[i].color = sf::Color(75, 75, 75);
-                window.draw(v);
+              sf::VertexArray v(sf::PrimitiveType::LineStrip, puntos.size());
+              for (size_t i = 0; i < puntos.size(); ++i)
+                  v[i].position = normalizar(puntos[i], minLon, maxLon, minLat, maxLat, W, H),
+                  v[i].color = sf::Color(75, 75, 75);
+              window.draw(v);
             }
 
             for (const auto& [id, coord] : nodos) {
-                sf::Vector2f pos = normalizar(coord, minLon, maxLon, minLat, maxLat, W, H);
-                sf::CircleShape punto(1.0f);
-                if ((inicio != -1 && id == inicio) || (destino != -1 && id == destino)) {
-                  punto.setRadius(3.0f);
-                  punto.setFillColor(sf::Color::Magenta);
-                } else {
-                  punto.setFillColor(sf::Color::Yellow);
-                }
-                punto.setOrigin({2.f, 2.f});
-                punto.setPosition(pos);
-                window.draw(punto);
+              sf::Vector2f pos = normalizar(coord, minLon, maxLon, minLat, maxLat, W, H);
+              sf::CircleShape punto(1.0f);
+              if ((inicio != -1 && id == inicio) || (destino != -1 && id == destino)) {
+                punto.setRadius(3.0f);
+                punto.setFillColor(sf::Color::Magenta);
+              } else {
+                punto.setFillColor(sf::Color::Yellow);
+              }
+              punto.setOrigin({2.f, 2.f});
+              punto.setPosition(pos);
+              window.draw(punto);
             }
 
             // Dibujar todos los pasos acumulados para la animación
             window.draw(animadas);
             window.display();
             sf::sleep(sf::milliseconds(5));
+          }
+
+          // Bucle de animacion de ruta encontrada
+          saltarAnimacion = false;
+          sf::VertexArray rutaAnimada(sf::PrimitiveType::Lines, 0);
+          for (size_t i = 1; i < path.size(); ++i) {
+            while (std::optional event = window.pollEvent()) {
+              if (event->is<sf::Event::Closed>()) {
+                window.close();
+                return 0;
+              }
+            }
+
+            if(saltarAnimacion) break;
+
+            const auto& nodoA = graph.getNodes().at(path[i - 1]);
+            const auto& nodoB = graph.getNodes().at(path[i]);
+
+            sf::Vector2f p1 = normalizar({nodoA.lon, nodoA.lat}, minLon, maxLon, minLat, maxLat, W, H);
+            sf::Vector2f p2 = normalizar({nodoB.lon, nodoB.lat}, minLon, maxLon, minLat, maxLat, W, H);
+
+            rutaAnimada.append(sf::Vertex({p1, colores[colorAnimacion % colores.size()]}));
+            rutaAnimada.append(sf::Vertex({p2, colores[colorAnimacion % colores.size()]}));
+
+            window.clear(sf::Color::Black);
+
+            // Redibujar mapa base
+            for (const auto& [_, puntos] : caminos) {
+              sf::VertexArray v(sf::PrimitiveType::LineStrip, puntos.size());
+              for (size_t j = 0; j < puntos.size(); ++j)
+                v[j].position = normalizar(puntos[j], minLon, maxLon, minLat, maxLat, W, H),
+                v[j].color = sf::Color(75, 75, 75);
+              window.draw(v);
+            }
+
+            // Redibujar nodos
+            for (const auto& [id, coord] : nodos) {
+              sf::Vector2f pos = normalizar(coord, minLon, maxLon, minLat, maxLat, W, H);
+              sf::CircleShape punto(1.0f);
+              if ((inicio != -1 && id == inicio) || (destino != -1 && id == destino)) {
+                punto.setRadius(3.0f);
+                punto.setFillColor(sf::Color::Magenta);
+              } else {
+                punto.setFillColor(sf::Color::Yellow);
+              }
+              punto.setOrigin({2.f, 2.f});
+              punto.setPosition(pos);
+              window.draw(punto);
+            }
+
+            // Dibujar ruta animada parcial
+            window.draw(rutaAnimada);
+            window.display();
+            sf::sleep(sf::milliseconds(50));
           }
 
           colorAnimacion++;
