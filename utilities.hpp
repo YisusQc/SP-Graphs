@@ -3,6 +3,8 @@
 #include <string>
 #include <vector>
 #include <map>
+#include "graph.hpp"
+#include "IPathFinder.hpp"
 
 using Coordenada = std::pair<double, double>;
 
@@ -15,3 +17,29 @@ void cargarCaminos(const std::string& basePath, std::map<long long, std::vector<
 std::vector<std::vector<Coordenada>> cargarRutas(const std::string& basePath);
 
 long long nodoMasCercano(sf::Vector2f clic, int W, int H, float umbral, std::map<long long, Coordenada>& nodos, double& minLon, double& maxLon, double& minLat, double& maxLat);
+
+void animarBusqueda(sf::RenderWindow& window,
+  const std::vector<IPathFinder::Paso>& pasos,
+  const Graph& graph,
+  const std::map<long long, Coordenada>& nodos,
+  const std::map<long long, std::vector<Coordenada>>& caminos,
+  double minLon, double maxLon, double minLat, double maxLat,
+  int W, int H,
+  long long inicio, long long destino,
+  int colorAnimacion, std::vector<sf::Color>& colores,
+  sf::View& view,
+  const float ZOOM_FACTOR, const float MOVE_SPEED,
+  sf::Color color = sf::Color::Cyan,
+  int delay_ms = 5);
+
+void animarRutaCorta(sf::RenderWindow& window,
+  const std::vector<long long>& path,
+  const Graph& graph,
+  const std::map<long long, Coordenada>& nodos,
+  const std::map<long long, std::vector<Coordenada>>& caminos,
+  double minLon, double maxLon, double minLat, double maxLat,
+  int W, int H,
+  long long inicio, long long destino,
+  int colorAnimacion, std::vector<sf::Color>& colores,
+  sf::Color color = sf::Color::Green,
+  int delay_ms = 50);
