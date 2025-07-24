@@ -29,7 +29,6 @@ void animarBusqueda(sf::RenderWindow& window,
   int colorAnimacion, std::vector<sf::Color>& colores,
   sf::View& view,
   const float ZOOM_FACTOR, const float MOVE_SPEED,
-  sf::Color color = sf::Color::Cyan,
   int delay_ms = 5);
 
 void animarRutaCorta(sf::RenderWindow& window,
@@ -41,5 +40,4 @@ void animarRutaCorta(sf::RenderWindow& window,
   int W, int H,
   long long inicio, long long destino,
   int colorAnimacion, std::vector<sf::Color>& colores,
-  sf::Color color = sf::Color::Green,
   int delay_ms = 50);
