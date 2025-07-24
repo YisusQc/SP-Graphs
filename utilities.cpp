@@ -97,7 +97,6 @@ void animarBusqueda(sf::RenderWindow& window,
   int colorAnimacion, std::vector<sf::Color>& colores,
   sf::View& view,
   const float ZOOM_FACTOR, const float MOVE_SPEED,
-  sf::Color color,
   int delay_ms) {
   sf::VertexArray animadas(sf::PrimitiveType::Lines, 0);
   bool saltarAnimacion = false;
@@ -172,7 +171,6 @@ void animarRutaCorta(sf::RenderWindow& window,
   int W, int H,
   long long inicio, long long destino,
   int colorAnimacion, std::vector<sf::Color>& colores,
-  sf::Color color,
   int delay_ms) {
   sf::VertexArray rutaAnimada(sf::PrimitiveType::Lines, 0);
 
