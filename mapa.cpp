@@ -55,6 +55,7 @@ int main() {
   std::vector<std::unique_ptr<IPathFinder>> algoritmos;
   algoritmos.emplace_back(std::make_unique<Dijkstra>());
   algoritmos.emplace_back(std::make_unique<BFSPathFinder>());
+  algoritmos.emplace_back(std::make_unique<BestFs>());
 
   while (window.isOpen()) {
     while (std::optional event = window.pollEvent()) {
