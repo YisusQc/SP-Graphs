@@ -7,6 +7,7 @@
 #include "graph.hpp"
 #include "utilities.hpp"
 #include "algoritmos/unsa_algoritmos.hpp"
+#include "algoritmos/BFS/BFS.hpp"
 
 const float ZOOM_FACTOR = 1.02f;
 const float MOVE_SPEED = 2.0f;
@@ -49,7 +50,7 @@ int main() {
   bool cambiarMapaPresionado = false;
   bool limpiarRutasPresionado = false;
 
-  std::unique_ptr<IPathFinder> algoritmo = std::make_unique<Dijkstra>();
+  std::unique_ptr<IPathFinder> algoritmo = std::make_unique<BFSPathFinder>();
 
   while (window.isOpen()) {
     while (std::optional event = window.pollEvent()) {

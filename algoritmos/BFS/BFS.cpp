@@ -1,13 +1,13 @@
 #include "BFS.hpp"
 #include <queue>
 #include <unordered_set>
-#include "../../graph.hpp"
 
-std::vector<long long> BFSPathFinder::find_path(
+std::unordered_map<long long, long long> BFSPathFinder::findPath(
     const Graph& graph,
     long long start,
     long long goal
-) const{
+) {
+    pasosAnimados.clear();  // Limpiar pasos anteriores
     std::unordered_map<long long, long long> prev;
     std::unordered_set<long long> visited;
     std::queue<long long> q;
@@ -21,9 +21,8 @@ std::vector<long long> BFSPathFinder::find_path(
         long long current = q.front();
         q.pop();
 
-        if (current == goal) {
-            return graph.reconstruct_path(prev, start, goal);
-        }
+        if (current == goal)
+            break;
 
         auto it = adj.find(current);
         if (it != adj.end()) {
@@ -31,13 +30,12 @@ std::vector<long long> BFSPathFinder::find_path(
                 if (visited.find(edge.target) == visited.end()) {
                     visited.insert(edge.target);
                     prev[edge.target] = current;
+                    pasosAnimados.push_back({current, edge.target}); // Para animación
                     q.push(edge.target);
                 }
             }
         }
     }
 
-    // Si no hay camino
-    return {};
+    return prev;
 }
-
