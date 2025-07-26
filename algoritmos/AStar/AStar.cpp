@@ -12,6 +12,7 @@ static double distancia(const Node& a, const Node& b) {
 
 std::unordered_map<long long, long long> AStar::findPath(const Graph& graph, long long start, long long goal) {
     pasosAnimados.clear();
+    iteraciones = 0;
     const auto& nodes = graph.getNodes();
     const auto& adj = graph.getGraph();
 
@@ -32,6 +33,7 @@ std::unordered_map<long long, long long> AStar::findPath(const Graph& graph, lon
 
         if (visited[current]) continue;
         visited[current] = true;
+        iteraciones++;
 
         if (current == goal) break;
 

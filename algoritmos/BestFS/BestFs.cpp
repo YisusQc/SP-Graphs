@@ -12,6 +12,7 @@ static double distancia(const Node& a, const Node& b) {
 
 std::unordered_map<long long, long long> BestFs::findPath(const Graph& graph, long long start, long long goal) {
     pasosAnimados.clear();
+    iteraciones = 0;
     const auto& nodes = graph.getNodes();
     const auto& adj = graph.getGraph();
 
@@ -28,6 +29,7 @@ std::unordered_map<long long, long long> BestFs::findPath(const Graph& graph, lo
 
         if (visited[u]) continue;
         visited[u] = true;
+        iteraciones++;
 
         if (u == goal) break;
 
