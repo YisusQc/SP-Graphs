@@ -12,6 +12,7 @@ Este programa permite construir y guardar "N" rutas óptimas por cada mapa con u
 | `Click Izquierdo`   | Seleccionar el punto de inicio y el punto de destino en el mapa (permite varias rutas)      |
 | `R` (Run)           | Calcular, animar y dibujar la ruta más corta entre los puntos seleccionados (si existe)     |
 | `B` (Break)         | Saltar animación de búsqueda                                                                |
+| `F` (Finish)        | Saltar animación de ruta corta encontrada                                                   |
 | `M` (Math)          | Cambiar al siguiente Algoritmo (en un bucle de 5 algoritmos)                                |
 | `C` (Clear)         | Limpiar las rutas dibujadas en el mapa actual                                               |
 | `ESC`               | Salir del programa                                                                          |

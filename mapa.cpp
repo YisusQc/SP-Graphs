@@ -4,6 +4,7 @@
 #include <map>
 #include <iostream>
 #include <optional>
+#include <cmath>
 #include "graph.hpp"
 #include "utilities.hpp"
 #include "algoritmos/unsa_algoritmos.hpp"
@@ -128,10 +129,16 @@ int main() {
 
         auto prevMap = algoritmo->findPath(graph, inicio, destino);
         auto path = graph.reconstruct_path(prevMap, inicio, destino);
+        double distanciaTotal = calcularDistancia(graph, path);
 
         if (!path.empty()) {
-          animarBusqueda(window, algoritmo->getPasosAnimados(), graph, nodos, caminos, minLon, maxLon, minLat, maxLat, W, H, inicio, destino, colorAnimacion, colores, 
-              view, ZOOM_FACTOR, MOVE_SPEED);
+          animarBusqueda(window, algoritmo->getPasosAnimados(), graph, nodos, caminos, minLon, maxLon, minLat, maxLat, W, H, inicio, destino, colorAnimacion, colores, view, ZOOM_FACTOR, MOVE_SPEED);
+
+          std::cout << "Iteraciones: " << algoritmo->getIteraciones() << "\n";
+          double km = distanciaTotal / 1000.0;
+          km = std::floor(km * 100) / 100;
+          std::cout << "Distancia de ruta encontrada: " << distanciaTotal << " metros (" << km << "km)\n";
+
           animarRutaCorta(window, path, graph, nodos, caminos, minLon, maxLon, minLat, maxLat, W, H, inicio, destino, colorAnimacion, colores);
 
           colorAnimacion++;

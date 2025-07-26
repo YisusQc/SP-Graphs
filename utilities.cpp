@@ -2,6 +2,7 @@
 #include <sstream>
 #include <limits>
 #include <cmath>
+#include <algorithm>
 #include "utilities.hpp"
 
 sf::Vector2f normalizar(Coordenada coord, double minLon, double maxLon, double minLat, double maxLat, int width, int height) {
@@ -101,6 +102,23 @@ long long nodoMasCercano(sf::Vector2f clic, int W, int H, float umbral, std::map
   return mejor;
 }
 
+double calcularDistancia(const Graph& graph, const std::vector<long long>& path) {
+  double total = 0.0;
+  const auto& adj = graph.getGraph();
+
+  for (size_t i = 1; i < path.size(); ++i) {
+    long long desde = path[i - 1], hacia = path[i];
+
+    const auto& edgesDesde = adj.at(desde);
+    auto it = std::find_if(edgesDesde.begin(), edgesDesde.end(), [&](const Edge& e) { return e.target == hacia; });
+
+    if (it != edgesDesde.end())
+      total += it->distance;
+  }
+
+  return total;
+}
+
 void animarBusqueda(sf::RenderWindow& window,
   const std::vector<IPathFinder::Paso>& pasos,
   const Graph& graph,
@@ -188,14 +206,20 @@ void animarRutaCorta(sf::RenderWindow& window,
   int colorAnimacion, std::vector<sf::Color>& colores,
   int delay_ms) {
   sf::VertexArray rutaAnimada(sf::PrimitiveType::Lines, 0);
+  bool saltarAnimacion = false;
 
   for (size_t i = 1; i < path.size(); ++i) {
     while (std::optional event = window.pollEvent()) {
       if (event->is<sf::Event::Closed>()) {
         window.close();
         return;
+      } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::F)) {
+        saltarAnimacion = true;
+        break;
       }
     }
+
+    if(saltarAnimacion) break;
 
     const auto& nodoA = graph.getNodes().at(path[i - 1]);
     const auto& nodoB = graph.getNodes().at(path[i]);

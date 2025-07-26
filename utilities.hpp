@@ -18,6 +18,7 @@ std::vector<std::vector<Coordenada>> cargarRutas(const std::string& basePath);
 void cargarEtiquetas(const std::string& rutaArchivo, std::map<long long, std::string>& etiquetas);
 
 long long nodoMasCercano(sf::Vector2f clic, int W, int H, float umbral, std::map<long long, Coordenada>& nodos, double& minLon, double& maxLon, double& minLat, double& maxLat);
+double calcularDistancia(const Graph& graph, const std::vector<long long>& path);
 
 void animarBusqueda(sf::RenderWindow& window,
   const std::vector<IPathFinder::Paso>& pasos,
