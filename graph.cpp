@@ -34,6 +34,23 @@ void Graph::load(const std::string& nodes_file, const std::string& edges_file) {
   }
 }
 
+void Graph::loadNodes(const std::string& nodes_file) {
+  nodes.clear();
+  graph.clear();
+
+  std::ifstream file(nodes_file);
+  std::string line; 
+  std::getline(file, line);  // saltar header
+  while (std::getline(file, line)) {
+    std::stringstream ss(line);
+    long long id;
+    double lat, lon;
+    char sep;
+    ss >> id >> sep >> lat >> sep >> lon;
+    nodes[id] = {id, lat, lon};
+  }
+}
+
 std::vector<long long> Graph::reconstruct_path(const std::unordered_map<long long, long long>& prev, long long start, long long goal) const{
   std::vector<long long> path;
   long long at = goal;
