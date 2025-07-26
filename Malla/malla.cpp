@@ -3,8 +3,8 @@
 #include <random>
 #include <iomanip>
 #include <SFML/Graphics.hpp>
-#include "graph.hpp"
-#include "utilities.hpp"
+#include "../graph.hpp"
+#include "../utilities.hpp"
 
 struct Nodo {
   long id;
@@ -19,7 +19,7 @@ Nodo generarNodo(long id_base, std::mt19937& rng, std::uniform_real_distribution
 int main() {
   const int N = 2000; // Objetivo 1 Millon
   const long id_inicio = 255000000;
-  const std::string archivo = "malla.csv";
+  const std::string archivo = "nodes.csv";
 
   std::random_device rd;
   std::mt19937 rng(rd());
@@ -42,8 +42,8 @@ int main() {
   Graph graph;
   std::map<long long, Coordenada> nodos;
   double minLon, maxLon, minLat, maxLat;
-  graph.loadNodes("malla.csv");
-  cargarNodos("malla.csv", nodos, minLon, maxLon, minLat, maxLat);
+  graph.loadNodes("nodes.csv");
+  cargarNodos("", nodos, minLon, maxLon, minLat, maxLat);
 
   // COMENTAR PARTE GRAFICA para pruebas de TRIANGULARIZACION con N mayor a 2k /*
   const int W = 1400, H = 900;

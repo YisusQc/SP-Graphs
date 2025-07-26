@@ -56,6 +56,7 @@ int main() {
   algoritmos.emplace_back(std::make_unique<Dijkstra>());
   algoritmos.emplace_back(std::make_unique<BFSPathFinder>());
   algoritmos.emplace_back(std::make_unique<BestFs>());
+  algoritmos.emplace_back(std::make_unique<AStar>());
 
   while (window.isOpen()) {
     while (std::optional event = window.pollEvent()) {
@@ -141,10 +142,10 @@ int main() {
       mostrarEtiquetaPresionado = !mostrarEtiquetaPresionado;
     if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::N))
       cambiarMapaPresionado = !cambiarMapaPresionado;
-    if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::C))
-      limpiarRutasPresionado = !limpiarRutasPresionado;
     if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::M))
       algoritmoPresionado = false;
+    if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::C))
+      limpiarRutasPresionado = !limpiarRutasPresionado;
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::A)) view.move({-MOVE_SPEED, 0});
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::D)) view.move({MOVE_SPEED, 0});

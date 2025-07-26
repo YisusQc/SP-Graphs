@@ -12,7 +12,7 @@ sf::Vector2f normalizar(Coordenada coord, double minLon, double maxLon, double m
 float distancia(const sf::Vector2f& a, const sf::Vector2f& b);
 bool esEncabezadoRuta(const std::string& line);
 
-void cargarNodos(const std::string& filename, std::map<long long, Coordenada>& nodos, double& minLon, double& maxLon, double& minLat, double& maxLat);
+void cargarNodos(const std::string& basePath, std::map<long long, Coordenada>& nodos, double& minLon, double& maxLon, double& minLat, double& maxLat);
 void cargarCaminos(const std::string& basePath, std::map<long long, std::vector<Coordenada>>& caminos);
 std::vector<std::vector<Coordenada>> cargarRutas(const std::string& basePath);
 void cargarEtiquetas(const std::string& rutaArchivo, std::map<long long, std::string>& etiquetas);

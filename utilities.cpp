@@ -18,9 +18,9 @@ bool esEncabezadoRuta(const std::string& line) {
   return line.rfind("INICIO:", 0) == 0 || line == "id,lat,lon";
 }
 
-void cargarNodos(const std::string& filename, std::map<long long, Coordenada>& nodos, double& minLon, double& maxLon, double& minLat, double& maxLat) {
+void cargarNodos(const std::string& basePath, std::map<long long, Coordenada>& nodos, double& minLon, double& maxLon, double& minLat, double& maxLat) {
   nodos.clear();
-  std::ifstream file(filename);
+  std::ifstream file(basePath + "nodes.csv");
   std::string line; std::getline(file, line);
 
   minLon = minLat = std::numeric_limits<double>::max();

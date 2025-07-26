@@ -4,6 +4,6 @@
 *.o
 *.so
 *rutas_cortas.csv
-*malla.csv
+*nodes.csv
 .vscode/
 *.bat
