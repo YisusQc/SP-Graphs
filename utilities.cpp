@@ -75,6 +75,21 @@ std::vector<std::vector<Coordenada>> cargarRutas(const std::string& basePath) {
   return rutas;
 }
 
+void cargarEtiquetas(const std::string& rutaArchivo, std::map<long long, std::string>& etiquetas) {
+  std::ifstream file(rutaArchivo);
+  std::string linea;
+  std::getline(file, linea);
+
+  while (std::getline(file, linea)) {
+    std::stringstream ss(linea);
+    std::string idStr, nombre;
+    if (std::getline(ss, idStr, ',') && std::getline(ss, nombre)) {
+      long long id = std::stoll(idStr);
+      etiquetas[id] = nombre;
+    }
+  }
+}
+
 long long nodoMasCercano(sf::Vector2f clic, int W, int H, float umbral, std::map<long long, Coordenada>& nodos, double& minLon, double& maxLon, double& minLat, double& maxLat) {
   long long mejor = -1;
   float mejorDist = umbral;

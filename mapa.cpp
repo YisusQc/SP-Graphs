@@ -18,7 +18,10 @@ int main() {
   for (int i = 1; i <= 5; i++)
     std::ofstream("data/mapa" + std::to_string(i) + "/rutas_cortas.csv", std::ios::trunc).close();
 
-  const int W = 1100, H = 800;
+  sf::Font font;
+  if (!font.openFromFile("fonts/arial.ttf")) { std::cerr << "Error al cargar la fuente\n"; }
+
+  const int W = 1500, H = 1000;
   sf::RenderWindow window(sf::VideoMode({W, H}), "Ruta Mas Corta");
   sf::View view = window.getDefaultView();
 
@@ -31,14 +34,20 @@ int main() {
   std::map<long long, Coordenada> nodos;
   std::map<long long, std::vector<Coordenada>> caminos;
   std::vector<std::vector<Coordenada>> rutas;
+  std::vector<std::map<long long, std::string>> etiquetasPorMapa(5);
   double minLon, maxLon, minLat, maxLat;
 
   cargarNodos(basePath, nodos, minLon, maxLon, minLat, maxLat);
   cargarCaminos(basePath, caminos);
+  cargarEtiquetas("data/mapa" + std::to_string(mapaActual) + "/etiquetas.csv", etiquetasPorMapa[mapaActual - 1]);
   graph.load(basePath + "nodes.csv", basePath + "edges.csv");
 
   long long inicio = -1, destino = -1;
   int colorAnimacion = 0;
+  bool mostrarEtiquetas = true;
+  bool mostrarEtiquetaPresionado = false;
+  bool cambiarMapaPresionado = false;
+  bool limpiarRutasPresionado = false;
 
   std::unique_ptr<IPathFinder> algoritmo = std::make_unique<Dijkstra>();
 
@@ -47,18 +56,31 @@ int main() {
       if (event->is<sf::Event::Closed>()) window.close();
       else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Escape)) window.close();
 
-      else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::N)) {
+      else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::L) && !mostrarEtiquetaPresionado) {
+        if (mostrarEtiquetas) {
+          std::cout << "Ocultando etiquetas" << "\n";
+          mostrarEtiquetas = !mostrarEtiquetas;
+        } else {
+          std::cout << "Mostrar etiquetas" << "\n";
+          mostrarEtiquetas = !mostrarEtiquetas;
+        }
+        mostrarEtiquetaPresionado = !mostrarEtiquetaPresionado;
+      }
+      else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::N) && !cambiarMapaPresionado) {
         view = window.getDefaultView();
         colorAnimacion = 0;
         mapaActual = (mapaActual % 5) + 1;
+        etiquetasPorMapa[mapaActual - 1].clear();
         basePath = "data/mapa" + std::to_string(mapaActual) + "/";
         std::cout << "Cambiando a mapa " << mapaActual << "\n";
 
         cargarNodos(basePath, nodos, minLon, maxLon, minLat, maxLat);
         cargarCaminos(basePath, caminos);
         rutas = cargarRutas(basePath);
+        cargarEtiquetas("data/mapa" + std::to_string(mapaActual) + "/etiquetas.csv", etiquetasPorMapa[mapaActual - 1]);
         graph.load(basePath + "nodes.csv", basePath + "edges.csv");
         inicio = destino = -1;
+        cambiarMapaPresionado = !cambiarMapaPresionado;
 
       } else if (event->is<sf::Event::MouseButtonPressed>()) {
         sf::Vector2i mousePos = sf::Mouse::getPosition(window);
@@ -95,12 +117,20 @@ int main() {
           std::cout << "No se encontro ruta.\n";
         inicio = destino = -1;
 
-      } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::C)) {
+      } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::C) && !limpiarRutasPresionado) {
         std::ofstream(basePath + "rutas_cortas.csv", std::ios::trunc).close();
         rutas.clear();
         std::cout << "Rutas del mapa " << mapaActual << " liberadas.\n";
+        limpiarRutasPresionado = !limpiarRutasPresionado;
       }
     }
+
+    if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::L))
+      mostrarEtiquetaPresionado = !mostrarEtiquetaPresionado;
+    if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::N))
+      cambiarMapaPresionado = !cambiarMapaPresionado;
+    if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::C))
+      limpiarRutasPresionado = !limpiarRutasPresionado;
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::A)) view.move({-MOVE_SPEED, 0});
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::D)) view.move({MOVE_SPEED, 0});
@@ -133,9 +163,30 @@ int main() {
     for (const auto& [id, coord] : nodos) {
       sf::Vector2f pos = normalizar(coord, minLon, maxLon, minLat, maxLat, W, H);
       sf::CircleShape punto(1.0f);
-      if ((inicio != -1 && id == inicio) || (destino != -1 && id == destino)) {
+
+      if (mostrarEtiquetas) {
+        auto& etiquetas = etiquetasPorMapa[mapaActual - 1];
+        auto it = etiquetas.find(id);
+        if (it != etiquetas.end()) {
+          sf::Text label(font);
+          label.setCharacterSize(11);
+          label.setString(it->second);
+          label.setFillColor(sf::Color::White);
+          label.setPosition(pos + sf::Vector2f(5.f, -12.f));
+          window.draw(label);
+        }
+      }
+
+      auto& etiquetas = etiquetasPorMapa[mapaActual - 1];
+      bool esInicioODestino = (inicio != -1 && id == inicio) || (destino != -1 && id == destino);
+      bool esEtiquetado = etiquetas.find(id) != etiquetas.end();
+
+      if (esInicioODestino) {
         punto.setRadius(3.0f);
         punto.setFillColor(sf::Color::Magenta);
+      } else if (mostrarEtiquetas && esEtiquetado) {
+        punto.setRadius(2.5f);
+        punto.setFillColor(sf::Color::Cyan);
       } else {
         punto.setFillColor(sf::Color::Yellow);
       }

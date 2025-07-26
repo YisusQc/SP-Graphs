@@ -15,6 +15,7 @@ bool esEncabezadoRuta(const std::string& line);
 void cargarNodos(const std::string& basePath, std::map<long long, Coordenada>& nodos, double& minLon, double& maxLon, double& minLat, double& maxLat);
 void cargarCaminos(const std::string& basePath, std::map<long long, std::vector<Coordenada>>& caminos);
 std::vector<std::vector<Coordenada>> cargarRutas(const std::string& basePath);
+void cargarEtiquetas(const std::string& rutaArchivo, std::map<long long, std::string>& etiquetas);
 
 long long nodoMasCercano(sf::Vector2f clic, int W, int H, float umbral, std::map<long long, Coordenada>& nodos, double& minLon, double& maxLon, double& minLat, double& maxLat);
 
