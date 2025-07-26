@@ -4,4 +4,5 @@
 *.o
 *.so
 *rutas_cortas.csv
+*malla.csv
 .vscode/
