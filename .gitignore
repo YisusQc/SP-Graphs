@@ -5,3 +5,4 @@
 *.so
 *rutas_cortas.csv
 .vscode/
+*.bat
