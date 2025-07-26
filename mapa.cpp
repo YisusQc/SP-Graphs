@@ -22,14 +22,12 @@ int main() {
   sf::Font font;
   if (!font.openFromFile("fonts/arial.ttf")) { std::cerr << "Error al cargar la fuente\n"; }
 
-  const int W = 1500, H = 1000;
+  const int W = 1400, H = 900;
   sf::RenderWindow window(sf::VideoMode({W, H}), "Ruta Mas Corta");
   sf::View view = window.getDefaultView();
 
-  std::vector<sf::Color> colores = {
-    sf::Color::Red, sf::Color::Green, sf::Color::Magenta,
-    {255,136,0}, {136,0,255}, {0,136,136}, {170,0,170}
-  };
+  std::vector<sf::Color> colores = {sf::Color::Red, sf::Color::Green, sf::Color::Magenta, {255,136,0}, {136,0,255}, {0,136,136}, {170,0,170}};
+  std::vector<std::string> titulosMapa = {"Arequipa - Cercado", "Mariano Melgar - Plaza Umachiri", "Paucarpata baja", "Yura viejo", "Cerro Colorado - Fundo Cabrerias"};
 
   Graph graph;
   std::map<long long, Coordenada> nodos;
@@ -210,6 +208,21 @@ int main() {
 
       window.draw(punto);
     }
+
+    sf::Text titulo(font);
+    titulo.setCharacterSize(16);
+    titulo.setString(titulosMapa[mapaActual - 1]);
+    titulo.setFillColor(sf::Color::White);
+    titulo.setStyle(sf::Text::Bold);
+    titulo.setPosition({10.f, 10.f});
+    window.draw(titulo);
+
+    sf::RectangleShape cajaTitulo({10.f + (titulosMapa[mapaActual - 1]).size() * 8.5f + 10.f, 30.f});
+    cajaTitulo.setPosition({3.f, 3.f});
+    cajaTitulo.setFillColor(sf::Color::Transparent);
+    cajaTitulo.setOutlineThickness(3.0f);
+    cajaTitulo.setOutlineColor(sf::Color::White);
+    window.draw(cajaTitulo);
 
     window.display();
   }
