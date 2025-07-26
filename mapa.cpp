@@ -44,13 +44,17 @@ int main() {
   graph.load(basePath + "nodes.csv", basePath + "edges.csv");
 
   long long inicio = -1, destino = -1;
+  int algoritmoActual = 0;
   int colorAnimacion = 0;
   bool mostrarEtiquetas = true;
   bool mostrarEtiquetaPresionado = false;
   bool cambiarMapaPresionado = false;
   bool limpiarRutasPresionado = false;
+  bool algoritmoPresionado = false;
 
-  std::unique_ptr<IPathFinder> algoritmo = std::make_unique<BFSPathFinder>();
+  std::vector<std::unique_ptr<IPathFinder>> algoritmos;
+  algoritmos.emplace_back(std::make_unique<Dijkstra>());
+  algoritmos.emplace_back(std::make_unique<BFSPathFinder>());
 
   while (window.isOpen()) {
     while (std::optional event = window.pollEvent()) {
@@ -99,6 +103,7 @@ int main() {
         }
       } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::R) && inicio != -1 && destino != -1) {
         std::string rutaArchivo = basePath + "rutas_cortas.csv";
+        auto& algoritmo = algoritmos[algoritmoActual];
         std::cout << "Algoritmo: " << algoritmo->name() << "\n";
         std::cout << "Calculando ruta de " << inicio << " a " << destino << "\n";
 
@@ -118,6 +123,11 @@ int main() {
           std::cout << "No se encontro ruta.\n";
         inicio = destino = -1;
 
+      } if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::M) && !algoritmoPresionado) {
+        algoritmoActual = (algoritmoActual + 1) % algoritmos.size();
+        std::cout << "Algoritmo cambiado a: " << algoritmos[algoritmoActual]->name() << "\n";
+        algoritmoPresionado = true;
+
       } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::C) && !limpiarRutasPresionado) {
         std::ofstream(basePath + "rutas_cortas.csv", std::ios::trunc).close();
         rutas.clear();
@@ -132,6 +142,8 @@ int main() {
       cambiarMapaPresionado = !cambiarMapaPresionado;
     if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::C))
       limpiarRutasPresionado = !limpiarRutasPresionado;
+    if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::M))
+      algoritmoPresionado = false;
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::A)) view.move({-MOVE_SPEED, 0});
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::D)) view.move({MOVE_SPEED, 0});
