@@ -21,7 +21,7 @@ private:
 
 public:
   void load(const std::string& nodes_file, const std::string& edges_file);
-  std::vector<long long> reconstruct_path(const std::unordered_map<long long, long long>& prev, long long start, long long goal);
+  std::vector<long long> reconstruct_path(const std::unordered_map<long long, long long>& prev, long long start, long long goal) const;
   void save_route(const std::vector<long long>& path, long long start, long long goal, const std::string& output_file, const std::unordered_map<long long, Node>& nodes);
 
   const std::unordered_map<long long, Node>& getNodes() const { return nodes; }

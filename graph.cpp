@@ -34,7 +34,7 @@ void Graph::load(const std::string& nodes_file, const std::string& edges_file) {
   }
 }
 
-std::vector<long long> Graph::reconstruct_path(const std::unordered_map<long long, long long>& prev, long long start, long long goal) {
+std::vector<long long> Graph::reconstruct_path(const std::unordered_map<long long, long long>& prev, long long start, long long goal) const{
   std::vector<long long> path;
   long long at = goal;
   while (at != start) {
