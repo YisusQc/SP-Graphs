@@ -161,7 +161,7 @@ void animarBusqueda(sf::RenderWindow& window,
       sf::Vector2f pos = normalizar(coord, minLon, maxLon, minLat, maxLat, W, H);
       sf::CircleShape punto(1.0f);
       if ((inicio != -1 && id == inicio) || (destino != -1 && id == destino)) {
-        punto.setRadius(3.0f);
+        punto.setRadius(5.0f);
         punto.setFillColor(sf::Color::Magenta);
       } else {
         punto.setFillColor(sf::Color::Yellow);
@@ -220,7 +220,7 @@ void animarRutaCorta(sf::RenderWindow& window,
       sf::Vector2f pos = normalizar(coord, minLon, maxLon, minLat, maxLat, W, H);
       sf::CircleShape punto(1.0f);
       if ((inicio != -1 && id == inicio) || (destino != -1 && id == destino)) {
-        punto.setRadius(3.0f);
+        punto.setRadius(5.0f);
         punto.setFillColor(sf::Color::Magenta);
       } else {
         punto.setFillColor(sf::Color::Yellow);

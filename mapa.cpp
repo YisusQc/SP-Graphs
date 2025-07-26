@@ -46,7 +46,8 @@ int main() {
   int colorAnimacion = 0;
   bool mostrarEtiquetas = true;
   bool mostrarEtiquetaPresionado = false;
-  bool cambiarMapaPresionado = false;
+  bool avanzarMapaPresionado = false;
+  bool retrocederMapaPresionado = false;
   bool limpiarRutasPresionado = false;
   bool algoritmoPresionado = false;
 
@@ -71,7 +72,8 @@ int main() {
         }
         mostrarEtiquetaPresionado = !mostrarEtiquetaPresionado;
       }
-      else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::N) && !cambiarMapaPresionado) {
+
+      else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::N) && !avanzarMapaPresionado) {
         view = window.getDefaultView();
         colorAnimacion = 0;
         mapaActual = (mapaActual % 5) + 1;
@@ -85,7 +87,23 @@ int main() {
         cargarEtiquetas("data/mapa" + std::to_string(mapaActual) + "/etiquetas.csv", etiquetasPorMapa[mapaActual - 1]);
         graph.load(basePath + "nodes.csv", basePath + "edges.csv");
         inicio = destino = -1;
-        cambiarMapaPresionado = !cambiarMapaPresionado;
+        avanzarMapaPresionado = !avanzarMapaPresionado;
+
+      } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::P) && !retrocederMapaPresionado) {
+        view = window.getDefaultView();
+        colorAnimacion = 0;
+        mapaActual = (mapaActual == 1) ? 5 : mapaActual - 1;
+        etiquetasPorMapa[mapaActual - 1].clear();
+        basePath = "data/mapa" + std::to_string(mapaActual) + "/";
+        std::cout << "Cambiando a mapa " << mapaActual << "\n";
+
+        cargarNodos(basePath, nodos, minLon, maxLon, minLat, maxLat);
+        cargarCaminos(basePath, caminos);
+        rutas = cargarRutas(basePath);
+        cargarEtiquetas("data/mapa" + std::to_string(mapaActual) + "/etiquetas.csv", etiquetasPorMapa[mapaActual - 1]);
+        graph.load(basePath + "nodes.csv", basePath + "edges.csv");
+        inicio = destino = -1;
+        retrocederMapaPresionado = !retrocederMapaPresionado;
 
       } else if (event->is<sf::Event::MouseButtonPressed>()) {
         sf::Vector2i mousePos = sf::Mouse::getPosition(window);
@@ -101,6 +119,7 @@ int main() {
             std::cout << "Nuevo inicio: " << inicio << '\n';
           }
         }
+
       } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::R) && inicio != -1 && destino != -1) {
         std::string rutaArchivo = basePath + "rutas_cortas.csv";
         auto& algoritmo = algoritmos[algoritmoActual];
@@ -139,7 +158,9 @@ int main() {
     if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::L))
       mostrarEtiquetaPresionado = !mostrarEtiquetaPresionado;
     if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::N))
-      cambiarMapaPresionado = !cambiarMapaPresionado;
+      avanzarMapaPresionado = !avanzarMapaPresionado;
+    if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::P))
+      retrocederMapaPresionado = !retrocederMapaPresionado;
     if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::M))
       algoritmoPresionado = false;
     if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::C))
@@ -195,10 +216,10 @@ int main() {
       bool esEtiquetado = etiquetas.find(id) != etiquetas.end();
 
       if (esInicioODestino) {
-        punto.setRadius(3.0f);
+        punto.setRadius(5.0f);
         punto.setFillColor(sf::Color::Magenta);
       } else if (mostrarEtiquetas && esEtiquetado) {
-        punto.setRadius(2.5f);
+        punto.setRadius(3.0f);
         punto.setFillColor(sf::Color::Cyan);
       } else {
         punto.setFillColor(sf::Color::Yellow);
@@ -214,7 +235,7 @@ int main() {
     titulo.setString(titulosMapa[mapaActual - 1]);
     titulo.setFillColor(sf::Color::White);
     titulo.setStyle(sf::Text::Bold);
-    titulo.setPosition({10.f, 10.f});
+    titulo.setPosition({8.f, 8.f});
     window.draw(titulo);
 
     sf::RectangleShape cajaTitulo({10.f + (titulosMapa[mapaActual - 1]).size() * 8.5f + 10.f, 30.f});
