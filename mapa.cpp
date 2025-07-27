@@ -5,6 +5,7 @@
 #include <iostream>
 #include <optional>
 #include <cmath>
+#include<chrono>
 #include "graph.hpp"
 #include "utilities.hpp"
 #include "algoritmos/unsa_algoritmos.hpp"
@@ -60,21 +61,30 @@ int main() {
   algoritmos.emplace_back(std::make_unique<DFS>());
   algoritmos.emplace_back(std::make_unique<AStar>());
 
+  float time_elapsed;
+
   sf::Text textoIteraciones(font);
   sf::Text textoDistancia(font);
+  sf::Text textoTiempo(font);
 
   std::stringstream ssIter;
   std::stringstream ssDist;
+  std::stringstream ssTiempo;
 
   textoIteraciones.setCharacterSize(18);
   textoIteraciones.setFillColor(sf::Color::White);
-  textoIteraciones.setPosition({10.f, H - 65.f});
+  textoIteraciones.setPosition({10.f, H - 85.f});
   textoIteraciones.setString("Iteraciones: _");
 
   textoDistancia.setCharacterSize(18);
   textoDistancia.setFillColor(sf::Color::White);
-  textoDistancia.setPosition({10.f, H - 35.f});
+  textoDistancia.setPosition({10.f, H - 55.f});
   textoDistancia.setString("Distancia: _");
+
+  textoTiempo.setCharacterSize(18);
+  textoTiempo.setFillColor(sf::Color::White);
+  textoTiempo.setPosition({10.f, H - 25.f});
+  textoTiempo.setString("Tiempo: _");
 
   while (window.isOpen()) {
     while (std::optional event = window.pollEvent()) {
@@ -109,6 +119,7 @@ int main() {
         avanzarMapaPresionado = !avanzarMapaPresionado;
         textoIteraciones.setString("Iteraciones: _");
         textoDistancia.setString("Distancia: _");
+        textoTiempo.setString("Tiempo Transcurrido: -");
 
       } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::P) && !retrocederMapaPresionado) {
         view = window.getDefaultView();
@@ -127,6 +138,7 @@ int main() {
         retrocederMapaPresionado = !retrocederMapaPresionado;
         textoIteraciones.setString("Iteraciones: _");
         textoDistancia.setString("Distancia: _");
+        textoTiempo.setString("Tiempo Transcurrido: -");
 
       } else if (event->is<sf::Event::MouseButtonPressed>()) {
         sf::Vector2i mousePos = sf::Mouse::getPosition(window);
@@ -149,7 +161,13 @@ int main() {
         std::cout << "Algoritmo: " << algoritmo->name() << "\n";
         std::cout << "Calculando ruta de " << inicio << " a " << destino << "\n";
 
+        //chrono wrapper
+        auto t0 = std::chrono::high_resolution_clock::now();
         auto prevMap = algoritmo->findPath(graph, inicio, destino);
+        auto t1 = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<float, std::milli> dt = t1 - t0;
+        time_elapsed=dt.count();
+
         auto path = graph.reconstruct_path(prevMap, inicio, destino);
         double distanciaTotal = calcularDistancia(graph, path);
 
@@ -161,11 +179,13 @@ int main() {
           km = std::floor(km * 100) / 100;
           std::cout << "Distancia de ruta encontrada: " << distanciaTotal << " metros (" << km << "km)\n";
 
-          ssIter.str(""); ssIter.clear(); ssDist.str(""); ssDist.clear();
+          ssIter.str(""); ssIter.clear(); ssDist.str(""); ssDist.clear();ssTiempo.str("");ssTiempo.clear();
           ssIter << "Iteraciones: " << algoritmo->getIteraciones();
           textoIteraciones.setString(ssIter.str());
           ssDist << "Distancia: " << distanciaTotal << " m (" << km << " km)";
           textoDistancia.setString(ssDist.str());
+          ssTiempo << "Tiempo: " << time_elapsed<< " ms";
+          textoTiempo.setString(ssTiempo.str());
 
           animarRutaCorta(window, path, graph, nodos, caminos, minLon, maxLon, minLat, maxLat, W, H, inicio, destino, colorAnimacion, colores);
 
@@ -183,6 +203,7 @@ int main() {
         algoritmoPresionado = true;
         textoIteraciones.setString("Iteraciones: _");
         textoDistancia.setString("Distancia: _");
+        textoTiempo.setString("Tiempo: _");
 
       } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::C) && !limpiarRutasPresionado) {
         std::ofstream(basePath + "rutas_cortas.csv", std::ios::trunc).close();
@@ -191,6 +212,7 @@ int main() {
         limpiarRutasPresionado = !limpiarRutasPresionado;
         textoIteraciones.setString("Iteraciones: _");
         textoDistancia.setString("Distancia: _");
+        textoTiempo.setString("Tiempo: _");
       }
     }
 
@@ -286,8 +308,8 @@ int main() {
     titulo.setPosition({8.f, 8.f});
     window.draw(titulo);
 
-    sf::RectangleShape cajaAlgoritmo({270.f, 95.f});
-    cajaAlgoritmo.setPosition({3.f, H - 100.f});
+    sf::RectangleShape cajaAlgoritmo({270.f, 150.f});
+    cajaAlgoritmo.setPosition({3.f, H - 120.f});
     cajaAlgoritmo.setFillColor(sf::Color::Black);
     cajaAlgoritmo.setOutlineThickness(3.0f);
     cajaAlgoritmo.setOutlineColor(sf::Color::White);
@@ -298,11 +320,12 @@ int main() {
     algoritmo.setString("Algoritmo: " + nombresAlgoritmos[algoritmoActual]);
     algoritmo.setFillColor(sf::Color::White);
     algoritmo.setStyle(sf::Text::Bold);
-    algoritmo.setPosition({10.f, H - 95.f});
+    algoritmo.setPosition({10.f, H - 110.f});
     window.draw(algoritmo);
 
     window.draw(textoIteraciones);
     window.draw(textoDistancia);
+    window.draw(textoTiempo);
 
     window.display();
   }
