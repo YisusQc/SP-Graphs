@@ -29,6 +29,7 @@ int main() {
 
   std::vector<sf::Color> colores = {sf::Color::Red, sf::Color::Green, sf::Color::Magenta, {255,136,0}, {136,0,255}, {0,136,136}, {170,0,170}};
   std::vector<std::string> titulosMapa = {"Arequipa - Cercado", "Mariano Melgar - Plaza Umachiri", "Paucarpata baja", "Yura viejo", "Cerro Colorado - Fundo Cabrerias"};
+  std::vector<std::string> nombresAlgoritmos = {"Dijkstra", "BFS", "BestFs", "DFS", "AStar"};
 
   Graph graph;
   std::map<long long, Coordenada> nodos;
@@ -252,6 +253,21 @@ int main() {
     cajaTitulo.setOutlineThickness(3.0f);
     cajaTitulo.setOutlineColor(sf::Color::White);
     window.draw(cajaTitulo);
+
+    sf::Text algoritmo(font);
+    algoritmo.setCharacterSize(18);
+    algoritmo.setString("Algoritmo: " + nombresAlgoritmos[algoritmoActual]);
+    algoritmo.setFillColor(sf::Color::White);
+    algoritmo.setStyle(sf::Text::Bold);
+    algoritmo.setPosition({10.f, H - 35.f});
+    window.draw(algoritmo);
+
+    sf::RectangleShape cajaAlgoritmo({110.f + (nombresAlgoritmos[algoritmoActual]).size() * 8.5f + 10.f, 30.f});
+    cajaAlgoritmo.setPosition({3.f, H - 40.f});
+    cajaAlgoritmo.setFillColor(sf::Color::Transparent);
+    cajaAlgoritmo.setOutlineThickness(3.0f);
+    cajaAlgoritmo.setOutlineColor(sf::Color::White);
+    window.draw(cajaAlgoritmo);
 
     window.display();
   }
