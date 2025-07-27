@@ -60,6 +60,22 @@ int main() {
   algoritmos.emplace_back(std::make_unique<DFS>());
   algoritmos.emplace_back(std::make_unique<AStar>());
 
+  sf::Text textoIteraciones(font);
+  sf::Text textoDistancia(font);
+
+  std::stringstream ssIter;
+  std::stringstream ssDist;
+
+  textoIteraciones.setCharacterSize(18);
+  textoIteraciones.setFillColor(sf::Color::White);
+  textoIteraciones.setPosition({10.f, H - 65.f});
+  textoIteraciones.setString("Iteraciones: _");
+
+  textoDistancia.setCharacterSize(18);
+  textoDistancia.setFillColor(sf::Color::White);
+  textoDistancia.setPosition({10.f, H - 35.f});
+  textoDistancia.setString("Distancia: _");
+
   while (window.isOpen()) {
     while (std::optional event = window.pollEvent()) {
       if (event->is<sf::Event::Closed>()) window.close();
@@ -91,6 +107,8 @@ int main() {
         graph.load(basePath + "nodes.csv", basePath + "edges.csv");
         inicio = destino = -1;
         avanzarMapaPresionado = !avanzarMapaPresionado;
+        textoIteraciones.setString("Iteraciones: _");
+        textoDistancia.setString("Distancia: _");
 
       } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::P) && !retrocederMapaPresionado) {
         view = window.getDefaultView();
@@ -107,6 +125,8 @@ int main() {
         graph.load(basePath + "nodes.csv", basePath + "edges.csv");
         inicio = destino = -1;
         retrocederMapaPresionado = !retrocederMapaPresionado;
+        textoIteraciones.setString("Iteraciones: _");
+        textoDistancia.setString("Distancia: _");
 
       } else if (event->is<sf::Event::MouseButtonPressed>()) {
         sf::Vector2i mousePos = sf::Mouse::getPosition(window);
@@ -141,6 +161,12 @@ int main() {
           km = std::floor(km * 100) / 100;
           std::cout << "Distancia de ruta encontrada: " << distanciaTotal << " metros (" << km << "km)\n";
 
+          ssIter.str(""); ssIter.clear(); ssDist.str(""); ssDist.clear();
+          ssIter << "Iteraciones: " << algoritmo->getIteraciones();
+          textoIteraciones.setString(ssIter.str());
+          ssDist << "Distancia: " << distanciaTotal << " m (" << km << " km)";
+          textoDistancia.setString(ssDist.str());
+
           animarRutaCorta(window, path, graph, nodos, caminos, minLon, maxLon, minLat, maxLat, W, H, inicio, destino, colorAnimacion, colores);
 
           colorAnimacion++;
@@ -155,12 +181,16 @@ int main() {
         algoritmoActual = (algoritmoActual + 1) % algoritmos.size();
         std::cout << "Algoritmo cambiado a: " << algoritmos[algoritmoActual]->name() << "\n";
         algoritmoPresionado = true;
+        textoIteraciones.setString("Iteraciones: _");
+        textoDistancia.setString("Distancia: _");
 
       } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::C) && !limpiarRutasPresionado) {
         std::ofstream(basePath + "rutas_cortas.csv", std::ios::trunc).close();
         rutas.clear();
         std::cout << "Rutas del mapa " << mapaActual << " liberadas.\n";
         limpiarRutasPresionado = !limpiarRutasPresionado;
+        textoIteraciones.setString("Iteraciones: _");
+        textoDistancia.setString("Distancia: _");
       }
     }
 
@@ -239,6 +269,15 @@ int main() {
       window.draw(punto);
     }
 
+    window.setView(window.getDefaultView());
+
+    sf::RectangleShape cajaTitulo({10.f + (titulosMapa[mapaActual - 1]).size() * 8.5f + 10.f, 30.f});
+    cajaTitulo.setPosition({3.f, 3.f});
+    cajaTitulo.setFillColor(sf::Color::Black);
+    cajaTitulo.setOutlineThickness(3.0f);
+    cajaTitulo.setOutlineColor(sf::Color::White);
+    window.draw(cajaTitulo);
+
     sf::Text titulo(font);
     titulo.setCharacterSize(16);
     titulo.setString(titulosMapa[mapaActual - 1]);
@@ -247,27 +286,23 @@ int main() {
     titulo.setPosition({8.f, 8.f});
     window.draw(titulo);
 
-    sf::RectangleShape cajaTitulo({10.f + (titulosMapa[mapaActual - 1]).size() * 8.5f + 10.f, 30.f});
-    cajaTitulo.setPosition({3.f, 3.f});
-    cajaTitulo.setFillColor(sf::Color::Transparent);
-    cajaTitulo.setOutlineThickness(3.0f);
-    cajaTitulo.setOutlineColor(sf::Color::White);
-    window.draw(cajaTitulo);
+    sf::RectangleShape cajaAlgoritmo({270.f, 95.f});
+    cajaAlgoritmo.setPosition({3.f, H - 100.f});
+    cajaAlgoritmo.setFillColor(sf::Color::Black);
+    cajaAlgoritmo.setOutlineThickness(3.0f);
+    cajaAlgoritmo.setOutlineColor(sf::Color::White);
+    window.draw(cajaAlgoritmo);
 
     sf::Text algoritmo(font);
     algoritmo.setCharacterSize(18);
     algoritmo.setString("Algoritmo: " + nombresAlgoritmos[algoritmoActual]);
     algoritmo.setFillColor(sf::Color::White);
     algoritmo.setStyle(sf::Text::Bold);
-    algoritmo.setPosition({10.f, H - 35.f});
+    algoritmo.setPosition({10.f, H - 95.f});
     window.draw(algoritmo);
 
-    sf::RectangleShape cajaAlgoritmo({110.f + (nombresAlgoritmos[algoritmoActual]).size() * 8.5f + 10.f, 30.f});
-    cajaAlgoritmo.setPosition({3.f, H - 40.f});
-    cajaAlgoritmo.setFillColor(sf::Color::Transparent);
-    cajaAlgoritmo.setOutlineThickness(3.0f);
-    cajaAlgoritmo.setOutlineColor(sf::Color::White);
-    window.draw(cajaAlgoritmo);
+    window.draw(textoIteraciones);
+    window.draw(textoDistancia);
 
     window.display();
   }
