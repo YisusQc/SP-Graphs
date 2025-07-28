@@ -1,7 +1,7 @@
 #include "DFS.hpp"
 #include <unordered_map>
 #include <unordered_set>
-#include <stack>
+#include "../../unsa/unsa.hpp"
 
 std::unordered_map<long long, long long> DFS::findPath(const Graph& graph, long long start, long long goal) {
   pasosAnimados.clear();
@@ -10,7 +10,7 @@ std::unordered_map<long long, long long> DFS::findPath(const Graph& graph, long 
   const auto& adj = graph.getGraph();
   std::unordered_map<long long, long long> prev;
   std::unordered_set<long long> visited;
-  std::stack<long long> stk;
+  unsa::Stack<long long> stk;
 
   stk.push(start);
 
