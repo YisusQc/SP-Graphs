@@ -29,6 +29,10 @@ public:
 
   bool empty() const;
   size_t size() const;
+
+  void reserve(size_t new_cap);
+  void clear();
+  void swap(Vector& swapped);
 };
 
 }

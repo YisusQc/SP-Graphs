@@ -76,4 +76,34 @@ bool Vector<T>::empty() const { return _idx == 0; }
 template <typename T>
 size_t Vector<T>::size() const { return _idx; }
 
+template <typename T>
+void Vector<T>::reserve(size_t new_capacity) {
+    if (new_capacity <= _capacity)
+        return;
+    T* temp = new T[new_capacity];
+    for (size_t i = 0; i < _idx; ++i) {
+        temp[i] = std::move(_data[i]);
+    }
+    delete[] _data;
+    _data = temp;
+    _capacity = new_capacity;
+}
+
+template <typename T>
+void Vector<T>::clear() {
+    // Destruimos los elementos actuales (opcional: llamar a destructor si fuese necesario)
+    for (size_t i = 0; i < _idx; ++i) {
+        _data[i].~T();
+    }
+    _idx = 0;
+}
+
+template <typename T>
+void Vector<T>::swap(Vector& other) noexcept {
+    using std::swap;
+    swap(_data,    other._data);
+    swap(_capacity, other._capacity);
+    swap(_idx,      other._idx);
+}
+
 }
