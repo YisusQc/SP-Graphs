@@ -1,5 +1,5 @@
 #include "AStar.hpp"
-#include <queue>
+#include "../unsa/unsa.hpp"
 #include <unordered_map>
 #include <cmath>
 #include <limits>
@@ -22,7 +22,7 @@ std::unordered_map<long long, long long> AStar::findPath(const Graph& graph, lon
     std::unordered_map<long long, bool> visited;
 
     using PQNode = std::pair<double, long long>; // (f(n), nodo)
-    std::priority_queue<PQNode, std::vector<PQNode>, std::greater<>> pq;
+    unsa::PriorityQueue<PQNode, std::greater<>> pq;
 
     g[start] = 0.0;
     f[start] = distancia(nodes.at(start), nodes.at(goal));

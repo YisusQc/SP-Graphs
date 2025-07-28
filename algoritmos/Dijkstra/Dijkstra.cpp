@@ -1,6 +1,6 @@
 #include "Dijkstra.hpp"
 #include <unordered_map>
-#include <queue>
+#include "../unsa/unsa.hpp"
 #include <limits>
 #include <algorithm>
 
@@ -18,7 +18,7 @@ std::unordered_map<long long, long long> Dijkstra::findPath(const Graph& graph, 
   dist[start] = 0.0;
 
   using PQNode = std::pair<double, long long>;
-  std::priority_queue<PQNode, std::vector<PQNode>, std::greater<>> pq;
+  unsa::PriorityQueue<PQNode, std::greater<>> pq;
   pq.push({0.0, start});
 
   while (!pq.empty()) {
