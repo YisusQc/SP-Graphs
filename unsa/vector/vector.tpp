@@ -2,10 +2,17 @@
 #include <stdexcept>
 #include <utility>
 #include <iostream>
+#include <algorithm>
 namespace unsa {
 
 template <typename T>
 vector<T>::vector(size_t size) : _capacity(size), _data(new T[size]), _idx(0) {}
+
+template <typename T>
+vector<T>::vector(std::initializer_list<T> init): _capacity(init.size()),_data(init.size() ? new T[init.size()] : nullptr),
+_idx(init.size()){
+  std::copy(init.begin(), init.end(), _data);
+}
 
 template <typename T>
 vector<T>::~vector() {

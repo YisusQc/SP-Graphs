@@ -1,5 +1,6 @@
 #pragma once
 #include <cstddef>
+#include <initializer_list>
 
 namespace unsa {
 
@@ -13,8 +14,9 @@ private:
 
 public:
   vector(size_t size = 0);
+  vector(std::initializer_list<T> init);//constructor {}
   ~vector();
-  
+
   void resize(size_t new_capacity);
   void push_back(const T& data);
   void pop_back();
