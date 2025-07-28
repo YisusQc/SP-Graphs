@@ -1,5 +1,5 @@
 #include "BestFS.hpp"
-#include <queue>
+#include "../unsa/unsa.hpp"
 #include <unordered_map>
 #include <cmath>
 #include <limits>
@@ -20,7 +20,7 @@ std::unordered_map<long long, long long> BestFs::findPath(const Graph& graph, lo
     std::unordered_map<long long, long long> prev;
 
     using PQNode = std::pair<double, long long>; // (heurística, nodo)
-    std::priority_queue<PQNode, std::vector<PQNode>, std::greater<>> pq;
+    unsa::PriorityQueue<PQNode, std::greater<>> pq;
 
     pq.push({distancia(nodes.at(start), nodes.at(goal)), start});
 

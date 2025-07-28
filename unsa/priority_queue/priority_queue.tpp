@@ -11,7 +11,7 @@ template <typename T, typename Compare>
 void PriorityQueue<T, Compare>::sift_up(int idx) {
   while (idx > 0) {
     int parent = (idx - 1) / 2;
-    if (!cmp(heap[idx], heap[parent])) break;
+    if (!cmp(heap[parent], heap[idx])) break;
     std::swap(heap[idx], heap[parent]);
     idx = parent;
   }
@@ -23,14 +23,14 @@ void PriorityQueue<T, Compare>::sift_down(int idx) {
   while (true) {
     int left = 2 * idx + 1;
     int right = 2 * idx + 2;
-    int smallest = idx;
+    int best = idx;
 
-    if (left < n && cmp(heap[left], heap[smallest])) smallest = left;
-    if (right < n && cmp(heap[right], heap[smallest])) smallest = right;
-    if (smallest == idx) break;
+    if (left < n && cmp(heap[best], heap[left])) best = left;
+    if (right < n && cmp(heap[best], heap[right])) best = right;
+    if (best == idx) break;
 
-    std::swap(heap[idx], heap[smallest]);
-    idx = smallest;
+    std::swap(heap[idx], heap[best]);
+    idx = best;
   }
 }
 
