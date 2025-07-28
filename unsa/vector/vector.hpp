@@ -4,7 +4,7 @@
 namespace unsa {
 
 template <typename T>
-class Vector {
+class vector {
 private:
   size_t _capacity;
   T* _data;
@@ -12,8 +12,8 @@ private:
   void resize(size_t new_capacity);
 
 public:
-  Vector(size_t size = 0);
-  ~Vector();
+  vector(size_t size = 0);
+  ~vector();
 
   void push_back(const T& data);
   void pop_back();
@@ -32,7 +32,10 @@ public:
 
   void reserve(size_t new_cap);
   void clear();
-  void swap(Vector& swapped);
+  void swap(vector& swapped) noexcept;
+
+  //test functions
+  void print();
 };
 
 }
