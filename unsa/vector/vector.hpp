@@ -21,6 +21,9 @@ public:
   void push_back(const T& data);
   void pop_back();
   void erase(int index);
+  //emplace_back
+  template <typename... Args>
+  T& emplace_back(Args&&... args);
 
   T& operator[](size_t idx);
   const T& operator[](size_t idx) const;

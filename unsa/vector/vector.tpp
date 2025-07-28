@@ -64,6 +64,16 @@ void vector<T>::erase(int index) {
 }
 
 template <typename T>
+template <typename... Args>
+T& Vector<T>::emplace_back(Args&&... args) {
+    if (_idx >= _capacity) {
+        reserve(_capacity ? _capacity * 2 : 1);
+    }
+    new(&_data[_idx]) T(std::forward<Args>(args)...);
+    return _data[_idx++];
+}
+
+template <typename T>
 T& vector<T>::operator[](size_t idx) {
   if (idx >= _idx) throw std::out_of_range("Index out of range");
   return _data[idx];
