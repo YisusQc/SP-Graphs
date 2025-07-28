@@ -9,12 +9,13 @@ private:
   size_t _capacity;
   T* _data;
   size_t _idx;
-  void resize(size_t new_capacity);
+
 
 public:
   vector(size_t size = 0);
   ~vector();
-
+  
+  void resize(size_t new_capacity);
   void push_back(const T& data);
   void pop_back();
   void erase(int index);

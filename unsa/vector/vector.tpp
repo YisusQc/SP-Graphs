@@ -14,13 +14,23 @@ vector<T>::~vector() {
 
 template <typename T>
 void vector<T>::resize(size_t new_capacity) {
-  T* temp = new T[new_capacity];
-  for (size_t i = 0; i < _idx; ++i) {
-    temp[i] = std::move(_data[i]);
-  }
-  delete[] _data;
-  _data = temp;
-  _capacity = new_capacity;
+    //Caso 1: Sobra
+    if (new_capacity <= _capacity) { 
+        for (size_t i = new_capacity; i < _idx; ++i) {
+            _data[i].~T();
+        }
+        _idx = new_capacity;
+        return;
+    }
+
+    //Caso 2: Falta
+    T* temp = new T[new_capacity];
+    for (size_t i = 0; i < _idx; ++i) {
+        temp[i] = std::move(_data[i]);
+    }
+    delete[] _data;
+    _data     = temp;
+    _capacity = new_capacity;
 }
 
 template <typename T>
