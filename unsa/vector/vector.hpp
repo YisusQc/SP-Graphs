@@ -13,8 +13,10 @@ private:
 
 
 public:
-  vector(size_t size = 0);
-  vector(std::initializer_list<T> init);//constructor {}
+  vector() noexcept; 
+  vector(size_t capacity);
+  vector(std::initializer_list<T> init); //constructor {}
+  vector& operator=(std::initializer_list<T> init); //constructor para retorno{}?
   ~vector();
 
   void resize(size_t new_capacity);

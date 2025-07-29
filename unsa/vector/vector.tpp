@@ -2,16 +2,41 @@
 #include <stdexcept>
 #include <utility>
 #include <iostream>
-#include <algorithm>
+#include<algorithm>
 namespace unsa {
 
 template <typename T>
-vector<T>::vector(size_t size) : _capacity(size), _data(new T[size]), _idx(0) {}
+vector<T>::vector() noexcept
+  : _capacity(0),
+    _data(nullptr),
+    _idx(0)
+{}
 
-template <typename T>
-vector<T>::vector(std::initializer_list<T> init): _capacity(init.size()),_data(init.size() ? new T[init.size()] : nullptr),
-_idx(init.size()){
-  std::copy(init.begin(), init.end(), _data);
+template<typename T>
+vector<T>::vector(size_t initial_capacity): _capacity(initial_capacity),
+      _data(initial_capacity ? static_cast<T*>(operator new[](initial_capacity * sizeof(T))) : nullptr),
+      _idx(0){}
+
+template<typename T>
+vector<T>::vector(std::initializer_list<T> init): _capacity(init.size()),
+      _data(init.size() ? static_cast<T*>(operator new[](init.size() * sizeof(T))) : nullptr),
+      _idx(init.size()){
+        size_t i = 0;
+        for (auto& el : init) {
+            new(&_data[i++]) T(el);
+        }
+}
+
+template<typename T>
+vector<T>& vector<T>::operator=(std::initializer_list<T> init) {
+    clear();
+    reserve(init.size());
+    size_t i = 0;
+    for (const T& el : init) {
+        new (&_data[i++]) T(el);
+    }
+    _idx = init.size();
+    return *this;
 }
 
 template <typename T>
@@ -65,11 +90,9 @@ void vector<T>::erase(int index) {
 
 template <typename T>
 template <typename... Args>
-T& Vector<T>::emplace_back(Args&&... args) {
-    if (_idx >= _capacity) {
-        reserve(_capacity ? _capacity * 2 : 1);
-    }
-    new(&_data[_idx]) T(std::forward<Args>(args)...);
+T& vector<T>::emplace_back(Args&&... args) {
+    if (_idx >= _capacity) reserve(_capacity ? _capacity * 2 : 1);
+    new (&_data[_idx]) T(std::forward<Args>(args)...);
     return _data[_idx++];
 }
 
