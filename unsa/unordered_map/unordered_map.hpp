@@ -1,39 +1,70 @@
 #pragma once
-
-#include <cstddef>
-//#include "unsa/pair/pair.hpp"
-#include "unsa/vector/vector.hpp"
-#include "unsa/hash/hash.hpp"
+#include "../vector/vector.hpp"
+#include "../pair/pair.hpp"
+#include "../hash/hash.hpp"
 
 namespace unsa {
 
-template <typename K, typename V, typename Hash = unsa::Hash<K>>
-class UnorderedMap {
+template <typename Key, typename T, typename Hash = hash<Key>>
+class unordered_map {
 private:
-  using PairType = unsa::Pair<K, V>;
-  using BucketType = unsa::Vector<PairType>;
+    static constexpr std::size_t default_bucket_count = 16;
 
-  BucketType* buckets;
-  size_t bucketCount;
-  size_t itemCount;
-  Hash hasher;
+    struct Entry {
+        pair<Key, T> data;
+        Entry* next;
+        Entry(const Key& key, const T& value) : data(key, value), next(nullptr) {}
+    };
 
-  void rehash();
+    vector<Entry*> buckets;
+    std::size_t count;
+    Hash hasher;
 
 public:
-  UnorderedMap(size_t initialBucketCount = 8);
-  ~UnorderedMap();
+    unordered_map();
+    ~unordered_map();
 
-  void insert(const K& key, const V& value);
-  V& operator[](const K& key);
-  bool get(const K& key, V& value) const;
-  bool erase(const K& key);
-  bool contains(const K& key) const;
-  size_t size() const;
-  bool empty() const;
-  void clear();
+    class iterator {
+    private:
+        unordered_map* map;
+        std::size_t bucket_index;
+        Entry* node;
+
+        void advance();
+
+    public:
+        iterator(unordered_map* map, std::size_t index, Entry* node);
+        pair<Key, T>& operator*() const;
+        pair<Key, T>* operator->() const;
+        iterator& operator++();
+        bool operator!=(const iterator& other) const;
+        bool operator==(const iterator& other) const;
+    };
+
+    using const_iterator = const iterator;
+
+    T& operator[](const Key& key);
+    T& at(const Key& key);
+    const T& at(const Key& key) const;
+
+    std::size_t size() const;
+    bool empty() const;
+
+    iterator begin();
+    iterator end();
+    const_iterator begin() const;
+    const_iterator end() const;
+
+    iterator find(const Key& key);
+    const_iterator find(const Key& key) const;
+
+    void insert(const pair<Key, T>& value);
+    void erase(const Key& key);
+    bool contains(const Key& key) const;
+    void clear();
 };
 
-}
+}  // namespace unsa
 
 #include "unordered_map.tpp"
+

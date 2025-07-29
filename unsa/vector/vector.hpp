@@ -1,35 +1,57 @@
-#pragma once
+#ifndef UNSA_VECTOR_HPP
+#define UNSA_VECTOR_HPP
+
 #include <cstddef>
+#include <initializer_list>
+#include <utility>
 
 namespace unsa {
 
 template <typename T>
-class Vector {
+class vector {
 private:
-  size_t _capacity;
-  T* _data;
-  size_t _idx;
-  void resize(size_t new_capacity);
+    T* data;
+    std::size_t _size;
+    std::size_t _capacity;
+
+    void reallocate(std::size_t new_capacity);
 
 public:
-  Vector(size_t size = 0);
-  ~Vector();
+    vector();
+    vector(std::initializer_list<T> init);
+    vector(const vector& other);
+    vector& operator=(const vector& other);
+    vector(std::size_t n);
+    ~vector();
 
-  void push_back(const T& data);
-  void pop_back();
-  void erase(int index);
+    void push_back(const T& value);
+    void pop_back();
+    void emplace_back(T&& value);
 
-  T& operator[](size_t idx);
-  const T& operator[](size_t idx) const;
+    template <typename... Args>
+    void emplace_back(Args&&... args);
 
-  T* begin();
-  T* end();
-  const T* begin() const;
-  const T* end() const;
+    void clear();
+    bool empty() const;
+    std::size_t size() const;
 
-  bool empty() const;
-  size_t size() const;
+    T& operator[](std::size_t index);
+    const T& operator[](std::size_t index) const;
+
+    T* begin();
+    T* end();
+    const T* begin() const;
+    const T* end() const;
+
+    T& front();
+    T& back();
+    const T& front() const;
+    const T& back() const;
 };
 
-}
+} // namespace unsa
+
 #include "vector.tpp"
+
+#endif // UNSA_VECTOR_HPP
+

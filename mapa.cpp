@@ -9,6 +9,9 @@
 #include "utilities.hpp"
 #include "algoritmos/unsa_algoritmos.hpp"
 #include "algoritmos/BFS/BFS.hpp"
+#include "unsa/map/map.hpp"
+#include "unsa/vector/vector.hpp"
+#include "unsa/vector/vector.tpp"
 
 const float ZOOM_FACTOR = 1.02f;
 const float MOVE_SPEED = 2.0f;
@@ -27,15 +30,15 @@ int main() {
   sf::RenderWindow window(sf::VideoMode({W, H}), "Ruta Mas Corta");
   sf::View view = window.getDefaultView();
 
-  std::vector<sf::Color> colores = {sf::Color::Red, sf::Color::Green, sf::Color::Magenta, {255,136,0}, {136,0,255}, {0,136,136}, {170,0,170}};
-  std::vector<std::string> titulosMapa = {"Arequipa - Cercado", "Mariano Melgar - Plaza Umachiri", "Paucarpata baja", "Yura viejo", "Cerro Colorado - Fundo Cabrerias"};
-  std::vector<std::string> nombresAlgoritmos = {"Dijkstra", "BFS", "BestFs", "DFS", "AStar"};
+  unsa::vector<sf::Color> colores = {sf::Color::Red, sf::Color::Green, sf::Color::Magenta, {255,136,0}, {136,0,255}, {0,136,136}, {170,0,170}};
+  unsa::vector<std::string> titulosMapa = {"Arequipa - Cercado", "Mariano Melgar - Plaza Umachiri", "Paucarpata baja", "Yura viejo", "Cerro Colorado - Fundo Cabrerias"};
+  unsa::vector<std::string> nombresAlgoritmos = {"Dijkstra", "BFS", "BestFs", "DFS", "AStar"};
 
   Graph graph;
-  std::map<long long, Coordenada> nodos;
-  std::map<long long, std::vector<Coordenada>> caminos;
-  std::vector<std::vector<Coordenada>> rutas;
-  std::vector<std::map<long long, std::string>> etiquetasPorMapa(5);
+  unsa::map<long long, Coordenada> nodos;
+  unsa::map<long long, unsa::vector<Coordenada>> caminos;
+  unsa::vector<unsa::vector<Coordenada>> rutas;
+  unsa::vector<unsa::map<long long, std::string>> etiquetasPorMapa(5);
   double minLon, maxLon, minLat, maxLat;
 
   cargarNodos(basePath, nodos, minLon, maxLon, minLat, maxLat);
@@ -53,7 +56,7 @@ int main() {
   bool limpiarRutasPresionado = false;
   bool algoritmoPresionado = false;
 
-  std::vector<std::unique_ptr<IPathFinder>> algoritmos;
+  unsa::vector<std::unique_ptr<IPathFinder>> algoritmos;
   algoritmos.emplace_back(std::make_unique<Dijkstra>());
   algoritmos.emplace_back(std::make_unique<BFS>());
   algoritmos.emplace_back(std::make_unique<BestFs>());

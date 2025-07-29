@@ -4,7 +4,7 @@
 #include <cmath>
 #include <algorithm>
 #include "utilities.hpp"
-
+#include "unsa/min_max/min_max.hpp"
 sf::Vector2f normalizar(Coordenada coord, double minLon, double maxLon, double minLat, double maxLat, int width, int height) {
   double x = (coord.first - minLon) / (maxLon - minLon) * width;
   double y = height - (coord.second - minLat) / (maxLat - minLat) * height;
@@ -19,7 +19,7 @@ bool esEncabezadoRuta(const std::string& line) {
   return line.rfind("INICIO:", 0) == 0 || line == "id,lat,lon";
 }
 
-void cargarNodos(const std::string& basePath, std::map<long long, Coordenada>& nodos, double& minLon, double& maxLon, double& minLat, double& maxLat) {
+void cargarNodos(const std::string& basePath, unsa::map<long long, Coordenada>& nodos, double& minLon, double& maxLon, double& minLat, double& maxLat) {
   nodos.clear();
   std::ifstream file(basePath + "nodes.csv");
   std::string line; std::getline(file, line);
@@ -32,14 +32,14 @@ void cargarNodos(const std::string& basePath, std::map<long long, Coordenada>& n
     long long id; double lat, lon; char sep;
     ss >> id >> sep >> lat >> sep >> lon;
     nodos[id] = {lon, lat};
-    minLon = std::min(minLon, lon);
-    maxLon = std::max(maxLon, lon);
-    minLat = std::min(minLat, lat);
-    maxLat = std::max(maxLat, lat);
+    minLon = unsa::min(minLon, lon);
+    maxLon = unsa::max(maxLon, lon);
+    minLat = unsa::min(minLat, lat);
+    maxLat = unsa::max(maxLat, lat);
   }
 }
 
-void cargarCaminos(const std::string& basePath, std::map<long long, std::vector<Coordenada>>& caminos) {
+void cargarCaminos(const std::string& basePath, unsa::map<long long, unsa::vector<Coordenada>>& caminos) {
   caminos.clear();
   std::ifstream file(basePath + "ways.csv");
   std::string line; std::getline(file, line);
@@ -57,10 +57,10 @@ void cargarCaminos(const std::string& basePath, std::map<long long, std::vector<
   }
 }
 
-std::vector<std::vector<Coordenada>> cargarRutas(const std::string& basePath) {
+unsa::vector<unsa::vector<Coordenada>> cargarRutas(const std::string& basePath) {
   std::ifstream file(basePath + "rutas_cortas.csv");
-  std::vector<std::vector<Coordenada>> rutas;
-  std::vector<Coordenada> actual;
+  unsa::vector<unsa::vector<Coordenada>> rutas;
+  unsa::vector<Coordenada> actual;
   std::string line;
   while (std::getline(file, line)) {
     if (line.empty() || esEncabezadoRuta(line)) {
@@ -76,7 +76,7 @@ std::vector<std::vector<Coordenada>> cargarRutas(const std::string& basePath) {
   return rutas;
 }
 
-void cargarEtiquetas(const std::string& rutaArchivo, std::map<long long, std::string>& etiquetas) {
+void cargarEtiquetas(const std::string& rutaArchivo, unsa::map<long long, std::string>& etiquetas) {
   std::ifstream file(rutaArchivo);
   std::string linea;
   std::getline(file, linea);
@@ -91,7 +91,7 @@ void cargarEtiquetas(const std::string& rutaArchivo, std::map<long long, std::st
   }
 }
 
-long long nodoMasCercano(sf::Vector2f clic, int W, int H, float umbral, std::map<long long, Coordenada>& nodos, double& minLon, double& maxLon, double& minLat, double& maxLat) {
+long long nodoMasCercano(sf::Vector2f clic, int W, int H, float umbral, unsa::map<long long, Coordenada>& nodos, double& minLon, double& maxLon, double& minLat, double& maxLat) {
   long long mejor = -1;
   float mejorDist = umbral;
   for (auto& [id, coord] : nodos) {
@@ -102,7 +102,7 @@ long long nodoMasCercano(sf::Vector2f clic, int W, int H, float umbral, std::map
   return mejor;
 }
 
-double calcularDistancia(const Graph& graph, const std::vector<long long>& path) {
+double calcularDistancia(const Graph& graph, const unsa::vector<long long>& path) {
   double total = 0.0;
   const auto& adj = graph.getGraph();
 
@@ -120,14 +120,14 @@ double calcularDistancia(const Graph& graph, const std::vector<long long>& path)
 }
 
 void animarBusqueda(sf::RenderWindow& window,
-  const std::vector<IPathFinder::Paso>& pasos,
+  const unsa::vector<IPathFinder::Paso>& pasos,
   const Graph& graph,
-  const std::map<long long, Coordenada>& nodos,
-  const std::map<long long, std::vector<Coordenada>>& caminos,
+  const unsa::map<long long, Coordenada>& nodos,
+  const unsa::map<long long, unsa::vector<Coordenada>>& caminos,
   double minLon, double maxLon, double minLat, double maxLat,
   int W, int H,
   long long inicio, long long destino,
-  int colorAnimacion, std::vector<sf::Color>& colores,
+  int colorAnimacion, unsa::vector<sf::Color>& colores,
   sf::View& view,
   const float ZOOM_FACTOR, const float MOVE_SPEED,
   int delay_ms) {
@@ -196,14 +196,14 @@ void animarBusqueda(sf::RenderWindow& window,
 }
 
 void animarRutaCorta(sf::RenderWindow& window,
-  const std::vector<long long>& path,
+  const unsa::vector<long long>& path,
   const Graph& graph,
-  const std::map<long long, Coordenada>& nodos,
-  const std::map<long long, std::vector<Coordenada>>& caminos,
+  const unsa::map<long long, Coordenada>& nodos,
+  const unsa::map<long long, unsa::vector<Coordenada>>& caminos,
   double minLon, double maxLon, double minLat, double maxLat,
   int W, int H,
   long long inicio, long long destino,
-  int colorAnimacion, std::vector<sf::Color>& colores,
+  int colorAnimacion, unsa::vector<sf::Color>& colores,
   int delay_ms) {
   sf::VertexArray rutaAnimada(sf::PrimitiveType::Lines, 0);
   bool saltarAnimacion = false;
