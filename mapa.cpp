@@ -8,10 +8,7 @@
 #include "graph.hpp"
 #include "utilities.hpp"
 #include "algoritmos/unsa_algoritmos.hpp"
-#include "algoritmos/BFS/BFS.hpp"
-#include "unsa/map/map.hpp"
-#include "unsa/vector/vector.hpp"
-#include "unsa/vector/vector.tpp"
+#include "unsa/unsa.hpp"
 
 const float ZOOM_FACTOR = 1.02f;
 const float MOVE_SPEED = 2.0f;
@@ -132,6 +129,7 @@ int main() {
         textoDistancia.setString("Distancia: _");
 
       } else if (event->is<sf::Event::MouseButtonPressed>()) {
+        window.setView(view);
         sf::Vector2i mousePos = sf::Mouse::getPosition(window);
         sf::Vector2f clic = window.mapPixelToCoords(mousePos);
         long long nodo = nodoMasCercano(clic, W, H, 8.f, nodos, minLon, maxLon, minLat, maxLat);
@@ -157,7 +155,7 @@ int main() {
         double distanciaTotal = calcularDistancia(graph, path);
 
         if (!path.empty()) {
-          animarBusqueda(window, algoritmo->getPasosAnimados(), graph, nodos, caminos, minLon, maxLon, minLat, maxLat, W, H, inicio, destino, colorAnimacion, colores, view, ZOOM_FACTOR, MOVE_SPEED);
+          animarBusqueda(window, algoritmo->getPasosAnimados(), graph, nodos, caminos, minLon, maxLon, minLat, maxLat, W, H, inicio, destino, colorAnimacion, colores, view, ZOOM_FACTOR, MOVE_SPEED, 5);
 
           std::cout << "Iteraciones: " << algoritmo->getIteraciones() << "\n";
           double km = distanciaTotal / 1000.0;
@@ -170,7 +168,7 @@ int main() {
           ssDist << "Distancia: " << distanciaTotal << " m (" << km << " km)";
           textoDistancia.setString(ssDist.str());
 
-          animarRutaCorta(window, path, graph, nodos, caminos, minLon, maxLon, minLat, maxLat, W, H, inicio, destino, colorAnimacion, colores);
+          animarRutaCorta(window, path, graph, nodos, caminos, minLon, maxLon, minLat, maxLat, W, H, inicio, destino, colorAnimacion, colores, view, ZOOM_FACTOR, MOVE_SPEED, 50);
 
           colorAnimacion++;
           graph.save_route(path, inicio, destino, rutaArchivo, graph.getNodes());

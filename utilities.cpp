@@ -171,13 +171,13 @@ void animarBusqueda(sf::RenderWindow& window,
       sf::VertexArray v(sf::PrimitiveType::LineStrip, puntos.size());
       for (size_t i = 0; i < puntos.size(); ++i)
         v[i].position = normalizar(puntos[i], minLon, maxLon, minLat, maxLat, W, H),
-        v[i].color = sf::Color(75, 75, 75);
+        v[i].color = sf::Color(50, 50, 50);
       window.draw(v);
     }
 
     for (const auto& [id, coord] : nodos) {
       sf::Vector2f pos = normalizar(coord, minLon, maxLon, minLat, maxLat, W, H);
-      sf::CircleShape punto(1.0f);
+      sf::CircleShape punto(0.5f);
       if ((inicio != -1 && id == inicio) || (destino != -1 && id == destino)) {
         punto.setRadius(5.0f);
         punto.setFillColor(sf::Color::Magenta);
@@ -204,6 +204,8 @@ void animarRutaCorta(sf::RenderWindow& window,
   int W, int H,
   long long inicio, long long destino,
   int colorAnimacion, unsa::vector<sf::Color>& colores,
+  sf::View& view,
+  const float ZOOM_FACTOR, const float MOVE_SPEED,
   int delay_ms) {
   sf::VertexArray rutaAnimada(sf::PrimitiveType::Lines, 0);
   bool saltarAnimacion = false;
@@ -221,6 +223,14 @@ void animarRutaCorta(sf::RenderWindow& window,
 
     if(saltarAnimacion) break;
 
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::A)) view.move({-MOVE_SPEED, 0});
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::D)) view.move({MOVE_SPEED, 0});
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::W)) view.move({0, -MOVE_SPEED});
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::S)) view.move({0, MOVE_SPEED});
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Q)) view.zoom(ZOOM_FACTOR);
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::E)) view.zoom(1.f / ZOOM_FACTOR);
+
     const auto& nodoA = graph.getNodes().at(path[i - 1]);
     const auto& nodoB = graph.getNodes().at(path[i]);
 
@@ -231,18 +241,19 @@ void animarRutaCorta(sf::RenderWindow& window,
     rutaAnimada.append(sf::Vertex({p2, colores[colorAnimacion % colores.size()]}));
 
     window.clear(sf::Color::Black);
+    window.setView(view);
 
     for (const auto& [_, puntos] : caminos) {
       sf::VertexArray v(sf::PrimitiveType::LineStrip, puntos.size());
       for (size_t i = 0; i < puntos.size(); ++i)
         v[i].position = normalizar(puntos[i], minLon, maxLon, minLat, maxLat, W, H),
-        v[i].color = sf::Color(75, 75, 75);
+        v[i].color = sf::Color(50, 50, 50);
       window.draw(v);
     }
 
     for (const auto& [id, coord] : nodos) {
       sf::Vector2f pos = normalizar(coord, minLon, maxLon, minLat, maxLat, W, H);
-      sf::CircleShape punto(1.0f);
+      sf::CircleShape punto(0.5f);
       if ((inicio != -1 && id == inicio) || (destino != -1 && id == destino)) {
         punto.setRadius(5.0f);
         punto.setFillColor(sf::Color::Magenta);

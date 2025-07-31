@@ -33,7 +33,7 @@ void animarBusqueda(sf::RenderWindow& window,
   int colorAnimacion, unsa::vector<sf::Color>& colores,
   sf::View& view,
   const float ZOOM_FACTOR, const float MOVE_SPEED,
-  int delay_ms = 5);
+  int delay_ms);
 
 void animarRutaCorta(sf::RenderWindow& window,
   const unsa::vector<long long>& path,
@@ -44,4 +44,6 @@ void animarRutaCorta(sf::RenderWindow& window,
   int W, int H,
   long long inicio, long long destino,
   int colorAnimacion, unsa::vector<sf::Color>& colores,
-  int delay_ms = 50);
+  sf::View& view,
+  const float ZOOM_FACTOR, const float MOVE_SPEED,
+  int delay_ms);
