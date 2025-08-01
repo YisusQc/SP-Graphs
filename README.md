@@ -2,7 +2,9 @@
 
 Este programa permite construir y guardar "N" rutas óptimas por cada mapa con una visualización interactiva, utilizando diferentes algoritmos de búsqueda.
 
-![Vista previa del programa](assets/Muestra-README.gif)
+<p align="center">
+  <img src="assets/Muestra-README.gif" alt="Vista previa del programa" width="600">
+</p>
 
 ### Algoritmos utilizados:
 
