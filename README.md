@@ -3,7 +3,7 @@
 Este programa permite construir y guardar "N" rutas óptimas por cada mapa con una visualización interactiva, utilizando diferentes algoritmos de búsqueda.
 
 <p align="center">
-  <img src="assets/Muestra-README.gif" alt="Vista previa del programa" width="600">
+  <img src="readme-sources/Muestra-README.gif" alt="Vista previa del programa" width="600">
 </p>
 
 ### Algoritmos utilizados:
@@ -13,6 +13,10 @@ Este programa permite construir y guardar "N" rutas óptimas por cada mapa con u
 - Breadth First Search
 - Best First Search
 - AStar
+
+### Informe:
+
+Para ver el proyecto más detalladamente acceder al informe: [Informe_del_proyecto](readme-sources/UnsaGraph-Doc.pdf)
 
 ## 🎮 Controles de Interacción
 
