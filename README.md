@@ -16,7 +16,7 @@ Este programa permite construir y guardar "N" rutas óptimas por cada mapa con u
 
 ### Informe:
 
-Para ver el proyecto más detalladamente acceder al informe: [Informe_del_proyecto](readme-sources/UnsaGraph-Doc.pdf)
+Para ver el proyecto más detalladamente acceder al informe: [📄 Documentación-UnsaGraph](readme-sources/Proyecto_Grafos-AED.pdf)
 
 ## 🎮 Controles de Interacción
 
