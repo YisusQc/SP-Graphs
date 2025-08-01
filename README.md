@@ -1,6 +1,15 @@
-## 🗺️ Visualizador de la Ruta Más Corta
+## 🗺️ Proyecto: UnsaGraph
 
-Este programa permite construir y guardar "N" rutas óptimas por cada mapa con una visualización dinámica, utilizando diferentes algoritmos de búsqueda.
+Este programa permite construir y guardar "N" rutas óptimas por cada mapa con una visualización interactiva, utilizando diferentes algoritmos de búsqueda.
+![Vista previa del programa](assets/Muestra-README.gif)
+
+### Algoritmos utilizados:
+
+- Dijkstra
+- Depth First Search
+- Breadth First Search
+- Best First Search
+- AStar
 
 ## 🎮 Controles de Interacción
 
