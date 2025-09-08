@@ -7,6 +7,7 @@
 #include "../graph.hpp"
 #include <algorithm>
 #include <chrono>
+#define _USE_MATH_DEFINES
 #include <cmath>
 #include <fstream>
 #include <iostream>
@@ -14,15 +15,30 @@
 #include <unistd.h>
 #include "../unsa/vector/vector.hpp"
 #include "../unsa/unordered_map/unordered_map.hpp"
+
+#ifdef _WIN32
+#include <windows.h>
+#include <psapi.h>
+#pragma comment(lib, "psapi.lib")
+#endif
+
 long getMemoryUsageKB() {
-  long rss = 0;
-  std::ifstream statm("/proc/self/statm");
-  if (statm) {
-    long size, resident;
-    statm >> size >> resident;
-    rss = resident * sysconf(_SC_PAGESIZE) / 1024;
-  }
-  return rss;
+#ifdef _WIN32
+    PROCESS_MEMORY_COUNTERS pmc;
+    if (GetProcessMemoryInfo(GetCurrentProcess(), &pmc, sizeof(pmc))) {
+        return pmc.WorkingSetSize / 1024;
+    }
+    return 0;
+#else
+    long rss = 0;
+    std::ifstream statm("/proc/self/statm");
+    if (statm) {
+        long size, resident;
+        statm >> size >> resident;
+        rss = resident * sysconf(_SC_PAGESIZE) / 1024;
+    }
+    return rss;
+#endif
 }
 
 constexpr double R = 6371000.0; // Radio Tierra (m)
