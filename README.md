@@ -22,7 +22,7 @@ Para ver el proyecto más detalladamente acceder al informe: [📄 Documentació
 
 | **Tecla / Acción**  | **Función**                                                                                 |
 |:-------------------:|:-------------------------------------------------------------------------------------------:|
-| `L` (Left)          | Mostrar / Ocultar etiquetas del mapa actual                                                 |
+| `L` (Label)          | Mostrar / Ocultar etiquetas del mapa actual                                                 |
 | `N` (Next)          | Cambiar al siguiente mapa (en un bucle de 5 mapas)                                          |
 | `P` (Previous)      | Retroceder al anterior mapa (en un bucle de 5 mapas)                                        |
 | `Click Izquierdo`   | Seleccionar el punto de inicio y el punto de destino en el mapa (permite varias rutas)      |
