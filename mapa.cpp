@@ -1,14 +1,11 @@
 #include <SFML/Graphics.hpp>
 #include <fstream>
-#include <vector>
-#include <map>
 #include <iostream>
 #include <optional>
 #include <cmath>
 #include "graph.hpp"
 #include "utilities.hpp"
 #include "algoritmos/unsa_algoritmos.hpp"
-#include "unsa/unsa.hpp"
 
 const float ZOOM_FACTOR = 1.02f;
 const float MOVE_SPEED = 2.0f;
@@ -25,6 +22,7 @@ int main() {
 
   const int W = 1400, H = 900;
   sf::RenderWindow window(sf::VideoMode({W, H}), "Ruta Mas Corta");
+  window.setFramerateLimit(60);
   sf::View view = window.getDefaultView();
 
   unsa::vector<sf::Color> colores = {sf::Color::Red, sf::Color::Green, sf::Color::Magenta, {255,136,0}, {136,0,255}, {0,136,136}, {170,0,170}};
@@ -310,3 +308,4 @@ int main() {
 
   return 0;
 }
+

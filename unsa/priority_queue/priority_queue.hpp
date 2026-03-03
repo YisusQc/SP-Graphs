@@ -1,8 +1,6 @@
 #pragma once
-#include <vector>
 #include <functional>
 #include <stdexcept>
-#include <algorithm> // para std::swap
 #include "../vector/vector.hpp"
 namespace unsa {
 

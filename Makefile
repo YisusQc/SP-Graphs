@@ -15,3 +15,4 @@ $(TARGET): $(OBJ)
 
 clean:
 	rm -f $(TARGET) *.o algoritmos/*/*.o
+

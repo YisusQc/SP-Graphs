@@ -1,7 +1,6 @@
 #ifndef UNSA_STACK_HPP
 #define UNSA_STACK_HPP
 
-#include <vector>
 #include <cstddef>  // std::size_t
 #include <stdexcept>
 #include "../vector/vector.hpp"

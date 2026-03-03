@@ -47,3 +47,4 @@ unsa::unordered_map<long long, long long> BestFs::findPath(const Graph& graph, l
 
     return prev;
 }
+

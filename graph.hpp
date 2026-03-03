@@ -1,6 +1,4 @@
 #pragma once
-#include <unordered_map>
-#include <vector>
 #include <string>
 #include "unsa/vector/vector.hpp"
 #include "unsa/unordered_map/unordered_map.hpp"
@@ -27,3 +25,4 @@ private:
     unsa::unordered_map<long long, Node> nodes;
     unsa::unordered_map<long long, unsa::vector<Edge>> graph;
 };
+

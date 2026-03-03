@@ -8,3 +8,4 @@ public:
     std::string name() const override { return "A*"; }
     unsa::unordered_map<long long, long long> findPath(const Graph& graph, long long start, long long goal) override;
 };
+

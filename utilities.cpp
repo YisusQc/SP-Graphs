@@ -5,6 +5,7 @@
 #include <algorithm>
 #include "utilities.hpp"
 #include "unsa/min_max/min_max.hpp"
+
 sf::Vector2f normalizar(Coordenada coord, double minLon, double maxLon, double minLat, double maxLat, int width, int height) {
   double x = (coord.first - minLon) / (maxLon - minLon) * width;
   double y = height - (coord.second - minLat) / (maxLat - minLat) * height;
@@ -270,3 +271,4 @@ void animarRutaCorta(sf::RenderWindow& window,
     sf::sleep(sf::milliseconds(delay_ms));
   }
 }
+

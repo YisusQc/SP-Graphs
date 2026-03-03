@@ -55,3 +55,4 @@ unsa::unordered_map<long long, long long> AStar::findPath(const Graph& graph, lo
 
     return prev;
 }
+

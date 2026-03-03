@@ -1,5 +1,4 @@
 #pragma once
-#include <unordered_map>
 #include <string>
 #include "graph.hpp"
 #include "unsa/vector/vector.hpp"
@@ -18,3 +17,4 @@ public:
 protected:
   int iteraciones = 0;
 };
+

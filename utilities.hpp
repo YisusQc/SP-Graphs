@@ -1,8 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <string>
-#include <vector>
-#include <map>
 #include "graph.hpp"
 #include "IPathFinder.hpp"
 #include "unsa/map/map.hpp"
@@ -47,3 +45,4 @@ void animarRutaCorta(sf::RenderWindow& window,
   sf::View& view,
   const float ZOOM_FACTOR, const float MOVE_SPEED,
   int delay_ms);
+
