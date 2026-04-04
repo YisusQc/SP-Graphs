@@ -59,36 +59,3 @@ void Graph::save_route(const std::vector<long long>& path, long long start, long
   file << "\n";
 }
 
-std::vector<long long> Graph::findPathDijkstra(long long start, long long goal) {
-  std::unordered_map<long long, double> dist;
-  std::unordered_map<long long, long long> prev;
-  std::set<std::pair<double, long long>> pq;
-
-  for (const auto& [id, _] : nodes) dist[id] = std::numeric_limits<double>::infinity();
-
-  dist[start] = 0.0;
-  pq.insert({0.0, start});
-
-  while (!pq.empty()) {
-    auto [current_dist, u] = *pq.begin();
-    pq.erase(pq.begin());
-
-    if (u == goal) break;
-
-    for (const Edge& edge : graph[u]) {
-      long long v = edge.target;
-      double weight = edge.distance;
-      double new_dist = current_dist + weight;
-
-      if (new_dist < dist[v]) {
-        pq.erase({dist[v], v});
-        dist[v] = new_dist;
-        prev[v] = u;
-        pq.insert({new_dist, v});
-      }
-    }
-  }
-
-  return reconstruct_path(prev, start, goal);
-}
-
