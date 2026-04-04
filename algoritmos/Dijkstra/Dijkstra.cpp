@@ -1,49 +1,48 @@
 #include "Dijkstra.hpp"
 #include <limits>
-#include "../../unsa/priority_queue/priority_queue.hpp"
-#include "../../unsa/vector/vector.hpp"
-#include "../../unsa/pair/pair.hpp"
-#include "../../unsa/unordered_map/unordered_map.hpp"
-unsa::unordered_map<long long, long long> Dijkstra::findPath(const Graph& graph, long long start, long long goal) {
-    iteraciones = 0;
-    pasosAnimados.clear();
+#include <queue>
+#include <utility>
 
-    const auto& nodes = graph.getNodes();
-    const auto& adj = graph.getGraph();
+std::unordered_map<long long, long long> Dijkstra::findPath(const Graph& graph, long long start, long long goal) {
+  iteraciones = 0;
+  pasosAnimados.clear();
 
-    unsa::unordered_map<long long, double> dist;
-    unsa::unordered_map<long long, long long> prev;
+  const auto& nodes = graph.getNodes();
+  const auto& adj = graph.getGraph();
 
-    for (const auto& [id, _] : nodes)
-        dist[id] = std::numeric_limits<double>::infinity();
+  std::unordered_map<long long, double> dist;
+  std::unordered_map<long long, long long> prev;
 
-    dist[start] = 0.0;
+  for (const auto& [id, _] : nodes)
+    dist[id] = std::numeric_limits<double>::infinity();
 
-    using PQNode = unsa::pair<double, long long>;  // {distance, node}
-    unsa::priority_queue<PQNode, unsa::vector<PQNode>, std::greater<>> pq;
-    pq.push({0.0, start});
+  dist[start] = 0.0;
 
-    while (!pq.empty()) {
-        auto [currentDist, u] = pq.top(); pq.pop();
-        iteraciones++;
+  using PQNode = std::pair<double, long long>;  // {distance, node}
+  std::priority_queue<PQNode, std::vector<PQNode>, std::greater<>> pq;
+  pq.push({0.0, start});
 
-        if (currentDist > dist[u]) continue;
-        if (u == goal) break;
+  while (!pq.empty()) {
+    auto [currentDist, u] = pq.top(); pq.pop();
+    iteraciones++;
 
-        auto it = adj.find(u);
-        if (it == adj.end()) continue;
+    if (currentDist > dist[u]) continue;
+    if (u == goal) break;
 
-        for (const auto& edge : it->second) {
-            double alt = dist[u] + edge.distance;
-            if (alt < dist[edge.target]) {
-                dist[edge.target] = alt;
-                prev[edge.target] = u;
-                pasosAnimados.push_back({u, edge.target});
-                pq.push({alt, edge.target});
-            }
-        }
+    auto it = adj.find(u);
+    if (it == adj.end()) continue;
+
+    for (const auto& edge : it->second) {
+      double alt = dist[u] + edge.distance;
+      if (alt < dist[edge.target]) {
+        dist[edge.target] = alt;
+        prev[edge.target] = u;
+        pasosAnimados.push_back({u, edge.target});
+        pq.push({alt, edge.target});
+      }
     }
+  }
 
-    return prev;
+  return prev;
 }
 

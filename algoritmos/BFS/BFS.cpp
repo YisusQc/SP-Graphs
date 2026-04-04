@@ -1,40 +1,40 @@
 #include "BFS.hpp"
-#include "../../unsa/queue/queue.hpp"
-#include "../../unsa/unordered_map/unordered_map.hpp"
-#include "../../unsa/unordered_set/unordered_set.hpp"
-unsa::unordered_map<long long, long long> BFS::findPath(const Graph& graph, long long start, long long goal) {
-    pasosAnimados.clear();
-    iteraciones = 0;
-    unsa::unordered_map<long long, long long> prev;
-    unsa::unordered_set visited;
-    unsa::queue<long long> q;
+#include <queue>
+#include <unordered_set>
 
-    q.push(start);
-    visited.insert(start);
+std::unordered_map<long long, long long> BFS::findPath(const Graph& graph, long long start, long long goal) {
+  pasosAnimados.clear();
+  iteraciones = 0;
+  std::unordered_map<long long, long long> prev;
+  std::unordered_set<long long> visited;
+  std::queue<long long> q;
 
-    const auto& adj = graph.getGraph();
+  q.push(start);
+  visited.insert(start);
 
-    while (!q.empty()) {
-        long long current = q.front();
-        q.pop();
-        iteraciones++;
+  const auto& adj = graph.getGraph();
 
-        if (current == goal)
-            break;
+  while (!q.empty()) {
+    long long current = q.front();
+    q.pop();
+    iteraciones++;
 
-        auto it = adj.find(current);
-        if (it != adj.end()) {
-            for (const Edge& edge : it->second) {
-                if (!visited.contains(edge.target)) {
-                    visited.insert(edge.target);
-                    prev[edge.target] = current;
-                    pasosAnimados.push_back({current, edge.target});
-                    q.push(edge.target);
-                }
-            }
+    if (current == goal)
+      break;
+
+    auto it = adj.find(current);
+    if (it != adj.end()) {
+      for (const Edge& edge : it->second) {
+        if (!visited.contains(edge.target)) {
+          visited.insert(edge.target);
+          prev[edge.target] = current;
+          pasosAnimados.push_back({current, edge.target});
+          q.push(edge.target);
         }
+      }
     }
+  }
 
-    return prev;
+  return prev;
 }
 

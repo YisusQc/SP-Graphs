@@ -1,20 +1,15 @@
+build
+Debug
 mapa
 *.exe
-*.dll
 *.out
-*.o
+*.dll
 *.so
+*.o
 *rutas_cortas.csv
 *nodes.csv
 .vscode/
 *.bat
 *.node
-Malla/csv_to_node
-Malla/edge_to_csv
-Malla/generar_nodos
-Malla/main_batch
-Malla/edges.csv
-Malla/graph.1.edge
-Malla/graph.1.ele
-Malla/metricas.csv
+Malla
 

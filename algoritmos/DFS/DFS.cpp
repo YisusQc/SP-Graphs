@@ -1,15 +1,15 @@
 #include "DFS.hpp"
-#include "../../unsa/stack/stack.hpp"
-#include "../../unsa/unordered_map/unordered_map.hpp"
-#include "../../unsa/unordered_set/unordered_set.hpp"
-unsa::unordered_map<long long, long long> DFS::findPath(const Graph& graph, long long start, long long goal) {
+#include <stack>
+#include <unordered_set>
+
+std::unordered_map<long long, long long> DFS::findPath(const Graph& graph, long long start, long long goal) {
   pasosAnimados.clear();
   iteraciones = 0;
 
   const auto& adj = graph.getGraph();
-  unsa::unordered_map<long long, long long> prev;
-  unsa::unordered_set visited;
-  unsa::Stack<long long> stk;
+  std::unordered_map<long long, long long> prev;
+  std::unordered_set<long long> visited;
+  std::stack<long long> stk;
 
   stk.push(start);
 
